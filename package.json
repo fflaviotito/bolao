@@ -1,18 +1,29 @@
 {
-  "dependencies": {
-    "express": "^5.1.0",
-    "mysql2": "^3.15.1"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.36.0",
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.5.2",
-    "eslint": "^9.36.0",
-    "eslint-plugin-react": "^7.37.5",
-    "globals": "^16.4.0",
-    "prettier": "^3.6.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.1"
-  }
+    "name": "bolao",
+    "version": "1.0.0",
+    "description": "Sistema de Bolão de Futebol Full-Stack",
+    "main": "server.ts",
+    "type": "module",
+    "scripts": {
+        "start": "ts-node src/server.ts",
+        "dev": "node --loader ts-node/esm src/server.ts"
+    },
+    "dependencies": {
+        "dotenv": "^17.2.2",
+        "express": "^5.1.0",
+        "mysql2": "^3.15.1"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.36.0",
+        "@types/express": "^5.0.3",
+        "@types/node": "^24.5.2",
+        "eslint": "^9.36.0",
+        "eslint-plugin-react": "^7.37.5",
+        "globals": "^16.4.0",
+        "prettier": "^3.6.2",
+        "ts-node": "^10.9.2",
+        "ts-node-dev": "^2.0.0",
+        "typescript": "^5.9.2",
+        "typescript-eslint": "^8.44.1"
+    }
 }
