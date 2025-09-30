@@ -1,6 +1,6 @@
 import { pool } from '../../db.js';
 import type { ResultSetHeader } from 'mysql2';
-import type { NewUserData } from '../../types/User.js';
+import type { UserCreateInput } from '../../types/User.js';
 
 /**
  * Cria um novo registro na tabela 'users'.
@@ -8,8 +8,8 @@ import type { NewUserData } from '../../types/User.js';
  * @returns O ID do usuário recém-criado.
  */
 
-const createUserRepository = async (data: NewUserData): Promise<number> => {
-    const query = 'INSERT INTO users(name, email, password, role) VALUES (?, ?, ?, ?)';
+const createUser = async (data: UserCreateInput): Promise<number> => {
+    const query = 'INSERT INTO users(name, email, password_hash, role) VALUES (?, ?, ?, ?)';
     const values = [data.name, data.email, data.passwordHash, data.role];
 
     const [result] = await pool.query<ResultSetHeader>(query, values);
@@ -17,4 +17,4 @@ const createUserRepository = async (data: NewUserData): Promise<number> => {
     return result.insertId;
 };
 
-export default createUserRepository;
+export default createUser;
