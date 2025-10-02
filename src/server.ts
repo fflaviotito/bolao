@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import type { Request, Response } from 'express';
-import { testDbConnection } from './db.js';
+import { initializePool, testDbConnection } from './db.js';
 
 const PORT = 3000;
 const app = express();
@@ -13,6 +13,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 const startServer = async () => {
+    initializePool(); 
+    
     await testDbConnection();
 
     app.listen(PORT, () => {

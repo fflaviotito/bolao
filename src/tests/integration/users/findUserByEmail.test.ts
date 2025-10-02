@@ -1,8 +1,10 @@
-import { pool } from '../../../db.js';
+import { getPool } from '../../../db.js';
 import { afterAll, beforeAll, describe, expect, test } from '@jest/globals';
 import type { UserCreateInput } from '../../../types/User.js';
 import createUser from '../../../repositories/users/createUser.js';
 import findUserByEmail from '../../../repositories/users/findUserByEmail.js';
+
+const pool = getPool();
 
 const testName = 'Usuário Teste do findUserByEmail';
 const testEmail = 'email.a.ser.encontrado@bolao.com';

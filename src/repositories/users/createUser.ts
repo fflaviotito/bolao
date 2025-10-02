@@ -1,6 +1,8 @@
-import { pool } from '../../db.js';
+import { getPool } from '../../db.js';
 import type { ResultSetHeader } from 'mysql2';
 import type { UserCreateInput } from '../../types/User.js';
+
+const pool = getPool();
 
 /**
  * Cria um novo registro na tabela 'users'.

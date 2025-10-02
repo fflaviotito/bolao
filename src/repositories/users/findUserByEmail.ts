@@ -1,6 +1,8 @@
-import { pool } from '../../db.js';
+import { getPool } from '../../db.js';
 import type { RowDataPacket } from 'mysql2';
 import type { User } from '../../types/User.js';
+
+const pool = getPool();
 
 /**
  * Busca um registro de usuário na tabela 'users' pelo e-mail.
