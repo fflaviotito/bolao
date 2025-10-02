@@ -17,6 +17,7 @@ const dbConfig = {
 
 export const pool = mysql.createPool(dbConfig as mysql.PoolOptions);
 
+/* istanbul ignore next */
 export const testDbConnection = async () => {
     try {
         await pool.query('SELECT 1 + 1 AS solution');

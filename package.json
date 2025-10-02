@@ -6,7 +6,8 @@
     "type": "module",
     "scripts": {
         "start": "ts-node src/server.ts",
-        "dev": "node --loader ts-node/esm src/server.ts"
+        "dev": "node --loader ts-node/esm src/server.ts",
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
     },
     "dependencies": {
         "dotenv": "^17.2.2",
