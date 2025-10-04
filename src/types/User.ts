@@ -14,3 +14,10 @@ export interface UserCreateInput {
     passwordHash: string,
     role: 'user' | 'admin',
 }
+
+export interface UserUpdateData {
+    id: number,
+    name?: string,
+    passwordHash?: string,
+    role?: 'user' | 'admin',
+}
