@@ -134,3 +134,16 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# --- Adições Personalizadas ---
+
+# Arquivos de sistema (Mac/Windows)
+.DS_Store
+Thumbs.db
+
+# Garante que ignoramos as builds do cliente especificamente
+/client/dist
+/client/build
+
+# Garante que a pasta coverage não suba
+/coverage
