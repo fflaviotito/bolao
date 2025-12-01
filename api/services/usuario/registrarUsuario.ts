@@ -41,10 +41,6 @@ export const registrarUsuario = async (dados: RegistrarUsuarioEntrada) => {
     return mapearParaUsuarioSaida(novoUsuario);
 };
 
-/**
- * Valida todos os campos recebidos pelo FrontEnd.
- * @param dados Objeto contendo nome, email, senha e confirmação.
- */
 const validarEntrada = (dados: RegistrarUsuarioEntrada) => {
     const schemaRegistro = z.object({
         nome: nomeRegra,
@@ -63,11 +59,6 @@ const validarEntrada = (dados: RegistrarUsuarioEntrada) => {
     return validacao.data;
 };
 
-/**
- * Mapeia os dados de Usuário recebido do Banco de Dados.
- * @param usuario Objeto contendo todos os dados de um Usuário.
- * @returns Objeto do Usuário sem a senha.
- */
 const mapearParaUsuarioSaida = (usuario: Usuario) => {
     const { senha, ...usuarioSemSenha } = usuario;
     return usuarioSemSenha;
