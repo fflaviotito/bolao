@@ -24,3 +24,29 @@ export const selecionarTodosUsuarios = async () => {
         }
     });
 };
+
+export const inserirTokenRecuperacao = async (dados: Prisma.TokenRecuperacaoUncheckedCreateInput) => {
+    return await prisma.tokenRecuperacao.create({
+        data: dados
+    });
+};
+
+export const selecionarTokenRecuperacao = async (token: string) => {
+    return await prisma.tokenRecuperacao.findUnique({
+        where: { token },
+        include: { usuario: true }
+    });
+};
+
+export const deletarTokensPorUsuarioId = async (usuarioId: number) => {
+    return await prisma.tokenRecuperacao.deleteMany({
+        where: { usuarioId }
+    });
+};
+
+export const atualizarSenhaUsuario = async (usuarioId: number, novaSenhaHash: string) => {
+    return await prisma.usuario.update({
+        where: { id: usuarioId },
+        data: { senha: novaSenhaHash }
+    });
+};

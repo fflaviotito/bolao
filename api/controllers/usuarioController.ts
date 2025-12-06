@@ -1,7 +1,10 @@
 import type { Request, Response } from 'express';
 import { registrarUsuario } from '../services/usuario/registrarUsuario';
-import { AppError } from '../utils/AppError';
 import { autenticarUsuario } from '../services/usuario/autenticarUsuario';
+import gerarTokenRecuperarSenha from '../services/usuario/gerarTokenRecuperarSenha';
+import validarTokenRecuperarSenha from '../services/usuario/validarTokenRecuperarSenha';
+import { tratarErroController } from '../utils/tratarErroController';
+import { redefinirSenha } from '../services/usuario/redefinirSenha';
 
 export const criarUsuario = async (req: Request, res: Response) => {
     try {
@@ -16,22 +19,7 @@ export const criarUsuario = async (req: Request, res: Response) => {
 
         return res.status(201).json(usuarioCriado);
     } catch (error) {
-        if (error instanceof AppError) {
-            return res.status(error.statusCode).json({
-                codigo: error.statusCode,
-                status: 'erro_validacao',
-                mensagem: error.message,
-                ...(error.errors && { erros: error.errors })
-            });
-        }
-
-        console.error(error);
-
-        return res.status(500).json({
-            codigo: 500,
-            status: 'erro_servidor',
-            mensagem: 'Ocorreu um erro inesperado no servidor.'
-        });
+        return tratarErroController(res, error);
     }
 };
 
@@ -46,21 +34,47 @@ export const login = async (req: Request, res: Response) => {
 
         return res.status(200).json(resultado);
     } catch (error) {
-        if (error instanceof AppError) {
-            return res.status(error.statusCode).json({
-                codigo: error.statusCode,
-                status: 'erro_autenticação',
-                mensagem: error.message,
-                ...(error.errors && { erros: error.errors })
-            });
-        }
+        return tratarErroController(res, error);
+    }
+};
 
-        console.error(error);
+export const esqueciSenha = async (req: Request, res: Response) => {
+    try {
+        const { email } = req.body;
 
-        return res.status(500).json({
-            codigo: 500,
-            status: 'erro_servidor',
-            mensagem: 'Ocorreu um erro inesperado no servidor.'
+        const resultado = await gerarTokenRecuperarSenha(email);
+
+        return res.status(200).json(resultado);
+    } catch (error) {
+        return tratarErroController(res, error);
+    }
+};
+
+export const conferirToken = async (req: Request, res: Response) => {
+    try {
+        const { email, token } = req.body;
+
+        const resultado = await validarTokenRecuperarSenha(email, token);
+
+        return res.status(200).json(resultado);
+    } catch (error) {
+        return tratarErroController(res, error);
+    }
+};
+
+export const atualizarSenha = async (req: Request, res: Response) => {
+    try {
+        const { token, email, senha, senhaConfirmacao } = req.body;
+
+        const resultado = await redefinirSenha({
+            token,
+            email,
+            senhaPura: senha,
+            senhaConfirmacao
         });
+
+        return res.status(200).json(resultado);
+    } catch (error) {
+        return tratarErroController(res, error);
     }
 };

@@ -23,3 +23,9 @@ export const senhaPuraLogin = z
     .string('Formato esperado para o campo é string')
     .trim()
     .min(1, 'Senha é obrigatória')
+
+export const tokenRegra = z
+    .string()
+    .length(6, 'O código deve ter 6 caracteres.')
+    .regex(/^[A-Z0-9]+$/, 'O código deve conter apenas letras maiúsculas e números.');
+    
