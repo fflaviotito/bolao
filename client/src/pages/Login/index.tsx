@@ -13,7 +13,7 @@ import api from '../../services/api';
 import type { LoginResponse } from '../../types/auth';
 import type { AxiosError } from 'axios';
 import type { RespostaErro } from '../../types/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import z from 'zod';
 import { emailRegra, senhaPuraLogin } from '../../validators/regras';
 import { toast } from 'react-toastify';
@@ -33,7 +33,7 @@ const Login = () => {
 
     useEffect(() => {
         document.title = 'Bolão | Acesse sua conta';
-        
+
         const token = localStorage.getItem('bolao:token');
         if (token) navegar('/', { replace: true });
     }, [navegar]);
@@ -124,10 +124,10 @@ const Login = () => {
                 </FormularioLogin>
 
                 <RodapeCartao>
-                    <a href="#">Esqueceu sua senha?</a>
-                    <a href="#">
+                    <Link to="/recuperar-senha">Esqueceu sua senha?</Link>
+                    <Link to="/cadastrar">
                         Não tem uma conta? <span>Cadastre-se</span>
-                    </a>
+                    </Link>
                 </RodapeCartao>
             </CartaoLogin>
         </LoginContainer>

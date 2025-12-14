@@ -1,5 +1,6 @@
 import type { ChangeEvent } from 'react';
-import { Container } from './style';
+import { Container, ListaErros } from './style';
+import type { ErrosPorCampo } from '../../utils/formatarErrosZod';
 
 interface InputTextoProps {
     label: string;
@@ -9,6 +10,7 @@ interface InputTextoProps {
     name: string;
     value: string;
     onChange: (evento: ChangeEvent<HTMLInputElement>) => void;
+    erros: ErrosPorCampo;
 }
 
 const InputTexto = ({
@@ -18,10 +20,14 @@ const InputTexto = ({
     required = false,
     name,
     value,
-    onChange
+    onChange,
+    erros
 }: InputTextoProps) => {
+    const errosDesteCampo = erros ? erros[name] : undefined;
+    const temErro = Boolean(errosDesteCampo)
+
     return (
-        <Container>
+        <Container $temErro={temErro}>
             <label htmlFor={label}>{label}:</label>
             <input
                 type={type}
@@ -32,6 +38,13 @@ const InputTexto = ({
                 value={value}
                 onChange={onChange}
             />
+            {errosDesteCampo && (
+                <ListaErros>
+                    {errosDesteCampo.map((msg, index) => (
+                        <li key={index}>{msg}</li>
+                    ))}
+                </ListaErros>
+            )}
         </Container>
     );
 };
