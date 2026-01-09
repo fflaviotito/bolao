@@ -4,6 +4,7 @@ import Cadastro from '../pages/Cadastro';
 import EsqueciSenha from '../pages/EsqueciSenha';
 import RotasPrivadas from './RotasPrivadas';
 import Inicio from '../pages/Inicio';
+import RotasAdmin from './RotasAdmin';
 
 const AppRoutes = () => {
     return (
@@ -13,6 +14,7 @@ const AppRoutes = () => {
             <Route path="/recuperar-senha" element={<EsqueciSenha />} />
             <Route element={<RotasPrivadas />}>
                 <Route path="/" element={<Inicio />} />
+                <Route path="/admin/*" element={<RotasAdmin />} />
             </Route>
             <Route path="*" element={<Navigate to="/entrar" />} />
         </Routes>
