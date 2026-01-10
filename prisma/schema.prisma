@@ -22,7 +22,9 @@ model Usuario {
   criadoEm        DateTime    @default(now()) @map("criado_em")
   atualizadoEm    DateTime    @updatedAt @map("atualizado_em")
 
-  tokensRecuperacao TokenRecuperacao[]
+  tokensRecuperacao       TokenRecuperacao[]
+  campeonatosCriados      Campeonato[] @relation("CriadorCampeonato")
+  campeonatosAtualizados  Campeonato[] @relation("AtualizadorCampeonato")
 
   @@map("usuarios")
 }
@@ -37,4 +39,23 @@ model TokenRecuperacao {
   usuario     Usuario     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
   @@map("tokens_recuperacao")
+}
+
+model Campeonato {
+  id                Int       @id @default(autoincrement())
+  nome              String    @db.VarChar(255)
+  divisao           String    @db.VarChar(255)
+  ano               Int
+  dataInicio        DateTime  @map("data_inicio") @db.Date
+  dataFim           DateTime  @map("data_fim") @db.Date
+  criadoEm          DateTime  @default(now()) @map("criado_em")
+  atualizadoEm      DateTime  @updatedAt @map("atualizado_em")
+
+  criadoPorId       Int       @map("criado_por_id")
+  criadoPor         Usuario   @relation("CriadorCampeonato", fields: [criadoPorId], references: [id])
+
+  atualizadoPorId   Int?      @map("atualizado_por_id")
+  atualizadoPor     Usuario?  @relation("AtualizadorCampeonato", fields: [atualizadoPorId], references: [id])
+
+  @@map("campeonatos")
 }
