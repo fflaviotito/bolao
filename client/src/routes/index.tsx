@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import Login from '../pages/Login';
-import Cadastro from '../pages/Cadastro';
-import EsqueciSenha from '../pages/EsqueciSenha';
+import Login from '../pages/autenticacao/Login';
+import Cadastro from '../pages/autenticacao/Cadastro';
+import EsqueciSenha from '../pages/autenticacao/EsqueciSenha';
 import RotasPrivadas from './RotasPrivadas';
 import Inicio from '../pages/Inicio';
 import RotasAdmin from './RotasAdmin';

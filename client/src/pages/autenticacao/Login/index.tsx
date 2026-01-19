@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import Botao from '../../components/Botao';
-import InputTexto from '../../components/InputTexto';
+import Botao from '../../../components/Botao';
+import InputTexto from '../../../components/InputTexto';
 import {
     CabecalhoCartao,
     CartaoLogin,
@@ -9,15 +9,15 @@ import {
     LoginContainer,
     RodapeCartao
 } from './style';
-import api from '../../services/api';
-import type { LoginResponse } from '../../types/auth';
+import api from '../../../services/api';
+import type { LoginResponse } from '../../../types/auth';
 import type { AxiosError } from 'axios';
-import type { RespostaErro } from '../../types/api';
+import type { RespostaErro } from '../../../types/api';
 import { useNavigate, Link } from 'react-router-dom';
 import z from 'zod';
-import { emailRegra, senhaPuraLogin } from '../../validators/regras';
+import { emailRegra, senhaPuraLogin } from '../../../validators/regras';
 import { toast } from 'react-toastify';
-import { useCarregando } from '../../contexts/CarregandoContext';
+import { useCarregando } from '../../../contexts/CarregandoContext';
 
 const loginSchema = z.object({
     email: emailRegra,

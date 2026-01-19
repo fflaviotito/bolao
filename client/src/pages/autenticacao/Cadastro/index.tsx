@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import Botao from '../../components/Botao';
-import InputTexto from '../../components/InputTexto';
+import Botao from '../../../components/Botao';
+import InputTexto from '../../../components/InputTexto';
 import {
     CabecalhoCartao,
     CartaoCadastro,
@@ -10,14 +10,14 @@ import {
     RodapeCartao
 } from './style';
 import z from 'zod';
-import { emailRegra, nomeRegra, senhaForteRegra } from '../../validators/regras';
+import { emailRegra, nomeRegra, senhaForteRegra } from '../../../validators/regras';
 import { toast } from 'react-toastify';
-import { useCarregando } from '../../contexts/CarregandoContext';
+import { useCarregando } from '../../../contexts/CarregandoContext';
 import type { AxiosError } from 'axios';
-import type { RespostaErro } from '../../types/api';
-import api from '../../services/api';
+import type { RespostaErro } from '../../../types/api';
+import api from '../../../services/api';
 import { Link, useNavigate } from 'react-router-dom';
-import { formatarErrosZod } from '../../utils/formatarErrosZod';
+import { formatarErrosZod } from '../../../utils/formatarErrosZod';
 
 const cadastroSchema = z
     .object({
