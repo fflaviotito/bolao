@@ -3,15 +3,17 @@ import { BotaoEstilizado } from './style';
 
 interface BotaoProps {
     tipo: 'button' | 'submit' | 'reset';
-    texto?: string;
-    variante: 'principal' | 'filtro' | 'adicionar';
+    texto: string;
+    variante: 'principal' | 'filtro' | 'adicionar' | 'paginacao';
     icone?: JSX.Element;
+    aoClicar?: () => void;
 }
 
-const Botao = ({ tipo, texto, variante, icone }: BotaoProps) => {
+const Botao = ({ aoClicar, tipo, texto, variante, icone }: BotaoProps) => {
     return (
-        <BotaoEstilizado type={tipo} $variante={variante}>
-            {icone}{texto}
+        <BotaoEstilizado type={tipo} $variante={variante} onClick={aoClicar}>
+            {icone}
+            {texto}
         </BotaoEstilizado>
     );
 };

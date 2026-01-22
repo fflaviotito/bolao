@@ -131,3 +131,31 @@ export const PilulaStatus = styled.span<{ $tipo: 'ativo' | 'finalizado' }>`
         }
     }}
 `;
+
+export const Paginacao = styled.div`
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+
+    .info-itens {
+        justify-content: start;
+        font-size: 14px;
+        color: ${({ theme }) => theme.cores.textoTerciario};
+        font-weight: normal;
+    }
+
+    .controles-paginacao {
+        justify-self: center;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        > span {
+            color: ${({ theme }) => theme.cores.textoSecundario};
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 24px;
+        }
+    }
+`

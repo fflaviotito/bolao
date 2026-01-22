@@ -46,4 +46,18 @@ export const BotaoEstilizado = styled.button<BotaoEstilizadoProps>`
                 background-color: ${theme.cores.hoverPrimario};
             }
         `}
+
+    ${({ $variante, theme }) =>
+        $variante === 'paginacao' && css`
+            background-color: transparent;
+            color : ${theme.cores.textoSecundario};
+            font-weight: bold;
+            font-size: 14px;
+            height: 100%;
+
+            &:hover {
+                color: ${theme.cores.textoPrimario};
+                text-decoration: underline;
+            }
+        `}
 `;

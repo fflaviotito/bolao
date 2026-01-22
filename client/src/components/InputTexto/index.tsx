@@ -10,7 +10,7 @@ interface InputTextoProps {
     name: string;
     value: string;
     onChange: (evento: ChangeEvent<HTMLInputElement>) => void;
-    erros: ErrosPorCampo;
+    erros?: ErrosPorCampo;
 }
 
 const InputTexto = ({

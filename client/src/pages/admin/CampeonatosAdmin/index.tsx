@@ -1,6 +1,8 @@
 import * as S from './style';
 import { Search, Filter, Plus } from 'lucide-react';
 import Botao from '../../../components/Botao';
+import { useState } from 'react';
+import FormNovoCampeonato from './FormNovoCampeonato';
 
 const dadosFicticios = [
     { id: 1, nome: 'Campeonato Brasileiro', ano: 2024, divisao: 'Série A', status: 'Finalizado' },
@@ -9,6 +11,8 @@ const dadosFicticios = [
 ];
 
 const CampeonatosAdmin = () => {
+    const [modalAberto, setModalAberto] = useState(true);
+
     return (
         <S.Container>
             <S.Cabecalho>
@@ -19,6 +23,7 @@ const CampeonatosAdmin = () => {
                         variante="adicionar"
                         texto="Novo"
                         icone={<Plus strokeWidth={3} />}
+                        aoClicar={() => setModalAberto(true)}
                     />
                 </div>
             </S.Cabecalho>
@@ -68,6 +73,20 @@ const CampeonatosAdmin = () => {
                     </tbody>
                 </S.Tabela>
             </S.TabelaContainer>
+            <S.Paginacao>
+                <div className="info-itens">
+                    <p>
+                        Mostrando <span>{dadosFicticios.length}</span> registro
+                        {dadosFicticios.length !== 1 && 's'}
+                    </p>
+                </div>
+                <div className="controles-paginacao">
+                    <Botao tipo="button" texto="Anterior" variante="paginacao" />
+                    <span>1</span>
+                    <Botao tipo="button" texto="Próximo" variante="paginacao" />
+                </div>
+            </S.Paginacao>
+            <FormNovoCampeonato aberto={modalAberto} aoFechar={() => setModalAberto(false)} />
         </S.Container>
     );
 };
