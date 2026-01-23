@@ -4,7 +4,7 @@ import { BotaoEstilizado } from './style';
 interface BotaoProps {
     tipo: 'button' | 'submit' | 'reset';
     texto: string;
-    variante: 'principal' | 'filtro' | 'adicionar' | 'paginacao';
+    variante: 'principal' | 'adicionar';
     icone?: JSX.Element;
     aoClicar?: () => void;
 }

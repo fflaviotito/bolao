@@ -22,36 +22,6 @@ export const Cabecalho = styled.div`
     }
 `;
 
-export const Filtros = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
-
-    .barra-busca {
-        > label {
-            position: absolute;
-            padding: 8px;
-        }
-
-        > input {
-            height: 48px;
-            width: 500px;
-            padding-left: 44px;
-            padding-right: 8px;
-            background-color: ${({ theme }) => theme.cores.fundoInput};
-            border: 1px solid ${({ theme }) => theme.cores.textoSecundario};
-            border-radius: 8px;
-            font-size: 16px;
-            color: ${({ theme }) => theme.cores.textoPrimario};
-        }
-    }
-
-    .btn-filtro {
-        width: 120px;
-    }
-`;
-
 export const TabelaContainer = styled.div`
     width: 100%;
     background-color: ${({ theme }) => theme.cores.fundoCartao};
@@ -61,6 +31,26 @@ export const TabelaContainer = styled.div`
         0 2px 4px #0000001a;
     border: ${({ theme }) => theme.cores.bordaInput};
     overflow: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+
+        &:hover {
+            background: #94a3b8;
+        }
+    }
 `;
 
 export const Tabela = styled.table`
@@ -79,6 +69,7 @@ export const Tabela = styled.table`
             letter-spacing: 0.05em;
             color: ${({ theme }) => theme.cores.textoSecundario};
             border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
         }
     }
 
@@ -131,31 +122,3 @@ export const PilulaStatus = styled.span<{ $tipo: 'ativo' | 'finalizado' }>`
         }
     }}
 `;
-
-export const Paginacao = styled.div`
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-
-    .info-itens {
-        justify-content: start;
-        font-size: 14px;
-        color: ${({ theme }) => theme.cores.textoTerciario};
-        font-weight: normal;
-    }
-
-    .controles-paginacao {
-        justify-self: center;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-
-        > span {
-            color: ${({ theme }) => theme.cores.textoSecundario};
-            font-size: 14px;
-            font-weight: bold;
-            text-align: center;
-            min-width: 24px;
-        }
-    }
-`
