@@ -9,6 +9,10 @@ export const Formulario = styled.form`
 export const AcoesFormulario = styled.div`
     display: flex;
     flex-direction: column-reverse;
-    gap: 16px;
-    margin-top: 16px;
+    gap: 12px;
+
+    @media (min-width: 430px) {
+        flex-direction: row;
+        justify-content: right;
+    }
 `

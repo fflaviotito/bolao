@@ -10,7 +10,7 @@ import {
     RodapeCartao
 } from './style';
 import z from 'zod';
-import { emailRegra, nomeRegra, senhaForteRegra } from '../../../validators/regras';
+import { emailRegra, nomeUsuarioRegra, senhaForteRegra } from '../../../validators/regras';
 import { toast } from 'react-toastify';
 import { useCarregando } from '../../../contexts/CarregandoContext';
 import type { AxiosError } from 'axios';
@@ -21,7 +21,7 @@ import { formatarErrosZod } from '../../../utils/formatarErrosZod';
 
 const cadastroSchema = z
     .object({
-        nome: nomeRegra,
+        nome: nomeUsuarioRegra,
         email: emailRegra,
         senha: senhaForteRegra,
         senhaConfirmacao: z.string()
@@ -146,7 +146,7 @@ const Cadastro = () => {
                             erros={erros}
                         />
                     </div>
-                    <Botao tipo="submit" texto="Cadastre-se" variante="principal" />
+                    <Botao tipo="submit" texto="Cadastre-se" variante="principal" larguraTotal />
                 </FormularioCadastro>
 
                 <RodapeCartao>

@@ -120,7 +120,7 @@ const Login = () => {
                             <label htmlFor="lembrar-me">Lembrar-me</label>
                         </div>
                     </div>
-                    <Botao tipo="submit" texto="Enviar" variante="principal" />
+                    <Botao tipo="submit" texto="Enviar" variante="principal" larguraTotal />
                 </FormularioLogin>
 
                 <RodapeCartao>

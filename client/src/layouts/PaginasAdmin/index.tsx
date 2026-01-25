@@ -2,7 +2,7 @@ import { Plus } from 'lucide-react';
 import Botao from '../../components/Botao';
 import * as S from './style';
 import BarraPesquisa from '../../components/BarraPesquisa';
-import type { ChangeEvent, ReactNode } from 'react';
+import { useEffect, type ChangeEvent, type ReactNode } from 'react';
 import Paginacao from '../../components/Paginacao';
 
 interface PaginasAdminProps {
@@ -28,19 +28,21 @@ const PaginasAdmin = ({
     totalRegistroPaginacao,
     valorBarraPesquisa
 }: PaginasAdminProps) => {
+    useEffect(() => {
+        document.title = 'Bolão | Painel de administração';
+    }, []);
+
     return (
         <>
             <S.Cabecalho>
                 <h1>{titulo}</h1>
-                <div>
-                    <Botao
-                        tipo="button"
-                        variante="adicionar"
-                        texto="Novo"
-                        icone={<Plus strokeWidth={3} />}
-                        aoClicar={aoClicarAdicionar}
-                    />
-                </div>
+                <Botao
+                    tipo="button"
+                    variante="primario"
+                    texto="Novo"
+                    icone={<Plus strokeWidth={3} />}
+                    aoClicar={aoClicarAdicionar}
+                />
             </S.Cabecalho>
             <BarraPesquisa
                 aoClicarApagar={aoClicarApagarBarraPesquisa}

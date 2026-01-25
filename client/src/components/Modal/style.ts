@@ -19,6 +19,7 @@ export const Container = styled.div`
     background-color: #FFF;
     width: 100%;
     max-width: 600px;
+    max-height: 90vh;
     padding: 32px 20px;
     border-radius: 12px;
     box-shadow:
@@ -27,7 +28,7 @@ export const Container = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 24px;
 `
 
 export const Cabecalho = styled.div`
@@ -39,10 +40,14 @@ export const Cabecalho = styled.div`
     > h2 {
         grid-column: 2;
         text-align: center;
-        font-size: 24px;
+        font-size: 20px;
         font-weight: bold;
         color: ${({ theme }) => theme.cores.textoPrimario};
         word-break: break-word;
+
+        @media (min-width: 390px) {
+            font-size: 24px;
+        }
     }
 
     > button {
@@ -61,3 +66,26 @@ export const Cabecalho = styled.div`
         }
     }
 `
+
+export const Conteudo = styled.div`
+    overflow-y: auto;
+    padding: 0 12px;
+    
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+
+        &:hover {
+            background: #94a3b8;
+        }
+    }
+`;

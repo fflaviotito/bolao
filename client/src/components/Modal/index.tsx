@@ -29,7 +29,7 @@ const Modal = ({ aberto, aoFechar, children, titulo }: ModalProps) => {
                         {<X size={24} strokeWidth={3} />}
                     </button>
                 </S.Cabecalho>
-                {children}
+                <S.Conteudo>{children}</S.Conteudo>
             </S.Container>
         </S.Overlay>
     );

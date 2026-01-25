@@ -1,77 +1,161 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import InputTexto from '../../../../components/InputTexto';
 import Modal from '../../../../components/Modal';
 import * as S from './style';
 import Botao from '../../../../components/Botao';
+import z from 'zod';
+import {
+    anoRegra,
+    dataBrasileiraRegra,
+    divisaoRegra,
+    nomePadraoRegra
+} from '../../../../validators/regras';
+import { formatarErrosZod } from '../../../../utils/formatarErrosZod';
+import { toast } from 'react-toastify';
+import { useCarregando } from '../../../../contexts/CarregandoContext';
+import type { AxiosError } from 'axios';
+import type { RespostaErro } from '../../../../types/api';
+import { transformarStringParaData } from '../../../../utils/transformarStringParaData';
+import { mascaraAno, mascaraData, mascaraTextoPadrao } from '../../../../utils/mascaras';
 
 interface FormNovoCampeonatoProps {
     aberto: boolean;
     aoFechar: () => void;
 }
 
+const schema = z
+    .object({
+        nome: nomePadraoRegra,
+        divisao: divisaoRegra,
+        ano: anoRegra,
+        dataInicio: dataBrasileiraRegra,
+        dataFim: dataBrasileiraRegra
+    })
+    .refine(
+        (dados) => {
+            if (dados.dataInicio.length === 10 && dados.dataFim.length === 10) {
+                const dataInicioFormatado = transformarStringParaData(dados.dataInicio);
+                const dataFimFormatado = transformarStringParaData(dados.dataFim);
+
+                return dataFimFormatado > dataInicioFormatado;
+            }
+            return true;
+        },
+        {
+            message: 'A data final deve ser posterior à inicial',
+            path: ['dataFim']
+        }
+    );
+
 const FormNovoCampeonato = ({ aberto, aoFechar }: FormNovoCampeonatoProps) => {
+    const { mostrarCarregando, esconderCarregando } = useCarregando();
     const [nome, setNome] = useState('');
     const [divisao, setDivisao] = useState('');
     const [ano, setAno] = useState('');
     const [dataInicio, setDataInicio] = useState('');
     const [dataFim, setDataFim] = useState('');
+    const [erros, setErros] = useState({});
+
+    const aoEnviar = async (evento: FormEvent) => {
+        evento.preventDefault();
+        setErros({});
+
+        const dadosValidos = schema.safeParse({ nome, divisao, ano, dataInicio, dataFim });
+        if (!dadosValidos.success) {
+            const errosFormatados = formatarErrosZod(dadosValidos.error);
+            setErros(errosFormatados);
+            return toast.warning('Verifique os campos destacados!');
+        }
+
+        const anoFormatado = Number(dadosValidos.data.ano);
+        const dataInicioFormatado = transformarStringParaData(dadosValidos.data.dataInicio);
+        const dataFimFormatado = transformarStringParaData(dadosValidos.data.dataFim);
+
+        try {
+            mostrarCarregando();
+            console.log({
+                nome: dadosValidos.data.nome,
+                divisao: dadosValidos.data.divisao,
+                ano: anoFormatado,
+                dataInicio: dataInicioFormatado,
+                dataFim: dataFimFormatado
+            });
+        } catch (error) {
+            const erroAxios = error as AxiosError<RespostaErro>;
+
+            if (!erroAxios.response) {
+                return toast.error('Erro de conexão com o servidor. Tente mais tarde!');
+            }
+        } finally {
+            esconderCarregando();
+        }
+    };
+
+    const aoCancelar = () => {
+        setNome('');
+        setDivisao('');
+        setAno('');
+        setDataInicio('');
+        setDataFim('');
+        aoFechar();
+    };
 
     return (
-        <Modal aberto={aberto} aoFechar={aoFechar} titulo="Novo Campeonato">
-            <S.Formulario>
+        <Modal aberto={aberto} aoFechar={aoCancelar} titulo="Novo Campeonato">
+            <S.Formulario onSubmit={aoEnviar}>
                 <InputTexto
                     label="Nome"
                     name="nome"
-                    onChange={(evento) => setNome(evento.target.value)}
+                    onChange={(evento) => setNome(mascaraTextoPadrao(evento.target.value))}
                     placeholder="Campeonato Brasileiro"
                     value={nome}
-                    required={true}
+                    required={false}
+                    erros={erros}
                 />
                 <InputTexto
                     label="Divisão"
                     name="divisao"
-                    onChange={(evento) => setDivisao(evento.target.value)}
+                    onChange={(evento) => setDivisao(mascaraTextoPadrao(evento.target.value))}
                     placeholder="Série A"
                     value={divisao}
-                    required={true}
+                    required={false}
+                    erros={erros}
                 />
                 <InputTexto
                     label="Ano"
                     name="ano"
-                    onChange={(evento) => setAno(evento.target.value)}
+                    onChange={(evento) => setAno(mascaraAno(evento.target.value))}
                     placeholder={new Date().getFullYear().toString()}
                     value={ano}
-                    required={true}
+                    required={false}
+                    erros={erros}
                 />
                 <InputTexto
                     label="Data de início"
                     name="dataInicio"
-                    onChange={(evento) => setDataInicio(evento.target.value)}
+                    onChange={(evento) => setDataInicio(mascaraData(evento.target.value))}
                     placeholder={`11/02/${new Date().getFullYear()}`}
                     value={dataInicio}
-                    required={true}
+                    required={false}
+                    erros={erros}
                 />
                 <InputTexto
                     label="Data de fim"
                     name="dataFim"
-                    onChange={(evento) => setDataFim(evento.target.value)}
+                    onChange={(evento) => setDataFim(mascaraData(evento.target.value))}
                     placeholder={`02/11/${new Date().getFullYear()}`}
                     value={dataFim}
-                    required={true}
+                    required={false}
+                    erros={erros}
                 />
                 <S.AcoesFormulario>
                     <Botao
                         texto="Cancelar"
                         tipo="button"
-                        variante="principal"
-                        aoClicar={aoFechar}
+                        variante="secundario"
+                        aoClicar={aoCancelar}
                     />
-                    <Botao
-                        texto="Salvar"
-                        tipo="submit"
-                        variante="principal"
-                        aoClicar={() => console.log('Salvando')}
-                    />
+                    <Botao texto="Salvar" tipo="submit" variante="primario" />
                 </S.AcoesFormulario>
             </S.Formulario>
         </Modal>

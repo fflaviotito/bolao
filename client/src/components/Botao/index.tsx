@@ -2,16 +2,22 @@ import type { JSX } from 'react';
 import { BotaoEstilizado } from './style';
 
 interface BotaoProps {
-    tipo: 'button' | 'submit' | 'reset';
-    texto: string;
-    variante: 'principal' | 'adicionar';
-    icone?: JSX.Element;
     aoClicar?: () => void;
+    icone?: JSX.Element;
+    larguraTotal?: boolean;
+    texto: string;
+    tipo: 'button' | 'submit' | 'reset';
+    variante: 'principal' | 'primario' | 'secundario';
 }
 
-const Botao = ({ aoClicar, tipo, texto, variante, icone }: BotaoProps) => {
+const Botao = ({ aoClicar, icone, larguraTotal = false, tipo, texto, variante }: BotaoProps) => {
     return (
-        <BotaoEstilizado type={tipo} $variante={variante} onClick={aoClicar}>
+        <BotaoEstilizado
+            type={tipo}
+            $variante={variante}
+            onClick={aoClicar}
+            $larguraTotal={larguraTotal}
+        >
             {icone}
             {texto}
         </BotaoEstilizado>

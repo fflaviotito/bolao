@@ -10,7 +10,7 @@ const dadosFicticios = [
 ];
 
 const CampeonatosAdmin = () => {
-    const [modalAberto, setModalAberto] = useState(true);
+    const [modalAberto, setModalAberto] = useState(false);
     const [barraPesquisa, setBarraPesquisa] = useState('');
     const [pagina, setPagina] = useState(1);
 

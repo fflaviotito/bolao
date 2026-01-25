@@ -4,22 +4,8 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 32px;
-    max-width: 1264px;
+    max-width: 1200px;
     margin: auto;
-    padding: 32px;
-`;
-
-export const Cabecalho = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
-
-    > h1 {
-        color: ${({ theme }) => theme.cores.textoPrimario};
-        font-weight: bold;
-        font-size: 32px;
-    }
 `;
 
 export const TabelaContainer = styled.div`
@@ -92,6 +78,7 @@ export const Tabela = styled.table`
                 color: ${({ theme }) => theme.cores.textoPrimario};
                 font-size: 14px;
                 font-weight: 500;
+                white-space: nowrap;
             }
         }
     }
