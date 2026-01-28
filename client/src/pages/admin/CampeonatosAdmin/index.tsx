@@ -1,18 +1,60 @@
 import * as S from './style';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import FormNovoCampeonato from './FormNovoCampeonato';
 import PaginasAdmin from '../../../layouts/PaginasAdmin';
+import { useCarregando } from '../../../contexts/CarregandoContext';
+import { toast } from 'react-toastify';
+import api from '../../../services/api';
 
-const dadosFicticios = [
-    { id: 1, nome: 'Campeonato Brasileiro', ano: 2024, divisao: 'Série A', status: 'Finalizado' },
-    { id: 2, nome: 'Campeonato Brasileiro', ano: 2025, divisao: 'Série A', status: 'Inativo' },
-    { id: 3, nome: 'Campeonato Brasileiro', ano: 2026, divisao: 'Série A', status: 'Ativo' }
-];
+interface Campeonatos {
+    ano: number;
+    divisao: string;
+    id: number;
+    nome: string;
+    dataInicio: Date;
+    dataFim: Date;
+}
 
 const CampeonatosAdmin = () => {
+    const { mostrarCarregando, esconderCarregando } = useCarregando();
     const [modalAberto, setModalAberto] = useState(false);
     const [barraPesquisa, setBarraPesquisa] = useState('');
     const [pagina, setPagina] = useState(1);
+    const [campeonatos, setCampeonatos] = useState<Campeonatos[]>([]);
+    const [totalRegistros, setTotalRegistros] = useState(0);
+
+    const buscarCampeonatos = useCallback(async () => {
+        try {
+            mostrarCarregando();
+
+            const resultado = await api.get('/campeonatos', {
+                params: {
+                    pagina: pagina
+                }
+            });
+
+            setCampeonatos(resultado.data.campeonatos);
+            setTotalRegistros(resultado.data.meta.totalRegistros);
+        } catch (error) {
+            toast.error('Erro ao carregar campeonatos.');
+            console.error(error);
+        } finally {
+            esconderCarregando();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pagina]);
+
+    useEffect(() => {
+        buscarCampeonatos();
+    }, [buscarCampeonatos]);
+
+    const calcularStatus = (inicio: Date, fim: Date) => {
+        const hoje = new Date();
+
+        if (hoje < new Date(inicio)) return 'Em breve';
+        if (hoje > new Date(fim)) return 'Finalizado';
+        return 'Ativo';
+    };
 
     return (
         <S.Container>
@@ -24,7 +66,7 @@ const CampeonatosAdmin = () => {
                 valorBarraPesquisa={barraPesquisa}
                 aoMudarPaginacao={setPagina}
                 paginacaoAtual={pagina}
-                totalRegistroPaginacao={dadosFicticios.length}
+                totalRegistroPaginacao={totalRegistros}
             >
                 <S.TabelaContainer>
                     <S.Tabela>
@@ -38,7 +80,7 @@ const CampeonatosAdmin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {dadosFicticios.map((campeonato) => (
+                            {campeonatos.map((campeonato) => (
                                 <tr
                                     key={campeonato.id}
                                     onClick={() => console.log('Clicou no', campeonato.id)}
@@ -52,12 +94,18 @@ const CampeonatosAdmin = () => {
                                     <td>
                                         <S.PilulaStatus
                                             $tipo={
-                                                campeonato.status === 'Ativo'
+                                                calcularStatus(
+                                                    campeonato.dataInicio,
+                                                    campeonato.dataFim
+                                                ) === 'Ativo'
                                                     ? 'ativo'
                                                     : 'finalizado'
                                             }
                                         >
-                                            {campeonato.status}
+                                            {calcularStatus(
+                                                campeonato.dataInicio,
+                                                campeonato.dataFim
+                                            )}
                                         </S.PilulaStatus>
                                     </td>
                                 </tr>
@@ -66,7 +114,11 @@ const CampeonatosAdmin = () => {
                     </S.Tabela>
                 </S.TabelaContainer>
             </PaginasAdmin>
-            <FormNovoCampeonato aberto={modalAberto} aoFechar={() => setModalAberto(false)} />
+            <FormNovoCampeonato
+                aberto={modalAberto}
+                aoCriar={buscarCampeonatos}
+                aoFechar={() => setModalAberto(false)}
+            />
         </S.Container>
     );
 };

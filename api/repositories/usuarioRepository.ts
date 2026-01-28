@@ -1,6 +1,12 @@
 import prisma from '../db';
 import type { Prisma } from '@prisma/client';
 
+export const selecionarUsuarioPorId = async (usuarioId: number) => {
+    return await prisma.usuario.findUnique({
+        where: { id: usuarioId }
+    });
+};
+
 export const selecionarUsuarioPorEmail = async (email: string) => {
     return await prisma.usuario.findUnique({
         where: { email }
@@ -25,7 +31,9 @@ export const selecionarTodosUsuarios = async () => {
     });
 };
 
-export const inserirTokenRecuperacao = async (dados: Prisma.TokenRecuperacaoUncheckedCreateInput) => {
+export const inserirTokenRecuperacao = async (
+    dados: Prisma.TokenRecuperacaoUncheckedCreateInput
+) => {
     return await prisma.tokenRecuperacao.create({
         data: dados
     });

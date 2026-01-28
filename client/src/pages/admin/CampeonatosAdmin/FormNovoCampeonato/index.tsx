@@ -17,9 +17,11 @@ import type { AxiosError } from 'axios';
 import type { RespostaErro } from '../../../../types/api';
 import { transformarStringParaData } from '../../../../utils/transformarStringParaData';
 import { mascaraAno, mascaraData, mascaraTextoPadrao } from '../../../../utils/mascaras';
+import api from '../../../../services/api';
 
 interface FormNovoCampeonatoProps {
     aberto: boolean;
+    aoCriar: () => void;
     aoFechar: () => void;
 }
 
@@ -47,7 +49,7 @@ const schema = z
         }
     );
 
-const FormNovoCampeonato = ({ aberto, aoFechar }: FormNovoCampeonatoProps) => {
+const FormNovoCampeonato = ({ aberto, aoCriar, aoFechar }: FormNovoCampeonatoProps) => {
     const { mostrarCarregando, esconderCarregando } = useCarregando();
     const [nome, setNome] = useState('');
     const [divisao, setDivisao] = useState('');
@@ -67,25 +69,38 @@ const FormNovoCampeonato = ({ aberto, aoFechar }: FormNovoCampeonatoProps) => {
             return toast.warning('Verifique os campos destacados!');
         }
 
-        const anoFormatado = Number(dadosValidos.data.ano);
-        const dataInicioFormatado = transformarStringParaData(dadosValidos.data.dataInicio);
-        const dataFimFormatado = transformarStringParaData(dadosValidos.data.dataFim);
-
         try {
             mostrarCarregando();
-            console.log({
-                nome: dadosValidos.data.nome,
-                divisao: dadosValidos.data.divisao,
-                ano: anoFormatado,
-                dataInicio: dataInicioFormatado,
-                dataFim: dataFimFormatado
+
+            await api.post('/admin/campeonatos', {
+                nome,
+                divisao,
+                ano,
+                dataInicio,
+                dataFim
             });
+
+            toast.success('Campeonato criado com sucesso!');
+            aoCancelar();
+            aoCriar();
         } catch (error) {
             const erroAxios = error as AxiosError<RespostaErro>;
 
             if (!erroAxios.response) {
                 return toast.error('Erro de conexão com o servidor. Tente mais tarde!');
             }
+
+            const { codigo } = erroAxios.response.data;
+
+            if (codigo === 400) return toast.warning('Campos inválidos!');
+
+            if (codigo === 401) return toast.warning('Entre em sua conta novamente!');
+
+            if (codigo === 403) return toast.error('Acesso negado!');
+
+            if (codigo === 409) return toast.error('Já existe um campeonato com este nome, divisão e ano!');
+
+            if (codigo === 500) return toast.error('Erro no servidor, contate o suporte!');
         } finally {
             esconderCarregando();
         }
@@ -97,6 +112,7 @@ const FormNovoCampeonato = ({ aberto, aoFechar }: FormNovoCampeonatoProps) => {
         setAno('');
         setDataInicio('');
         setDataFim('');
+        setErros({})
         aoFechar();
     };
 

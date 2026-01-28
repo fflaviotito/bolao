@@ -1,6 +1,6 @@
 export interface RespostaErro {
     codigo: number;
-    mensagem: string;
-    erros?: Record<string, string[]>;
+    message: string;
+    errors?: Record<string, string[]>;
     papel: string;
 }
