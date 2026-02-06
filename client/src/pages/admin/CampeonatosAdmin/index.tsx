@@ -1,10 +1,8 @@
 import * as S from './style';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useBuscaPaginada } from '@/hooks/useBuscaPaginada';
+import PaginasAdmin from '@/layouts/PaginasAdmin';
 import FormNovoCampeonato from './FormNovoCampeonato';
-import PaginasAdmin from '../../../layouts/PaginasAdmin';
-import { useCarregando } from '../../../contexts/CarregandoContext';
-import { toast } from 'react-toastify';
-import api from '../../../services/api';
 
 interface Campeonatos {
     ano: number;
@@ -16,37 +14,16 @@ interface Campeonatos {
 }
 
 const CampeonatosAdmin = () => {
-    const { mostrarCarregando, esconderCarregando } = useCarregando();
     const [modalAberto, setModalAberto] = useState(false);
-    const [barraPesquisa, setBarraPesquisa] = useState('');
-    const [pagina, setPagina] = useState(1);
-    const [campeonatos, setCampeonatos] = useState<Campeonatos[]>([]);
-    const [totalRegistros, setTotalRegistros] = useState(0);
-
-    const buscarCampeonatos = useCallback(async () => {
-        try {
-            mostrarCarregando();
-
-            const resultado = await api.get('/campeonatos', {
-                params: {
-                    pagina: pagina
-                }
-            });
-
-            setCampeonatos(resultado.data.campeonatos);
-            setTotalRegistros(resultado.data.meta.totalRegistros);
-        } catch (error) {
-            toast.error('Erro ao carregar campeonatos.');
-            console.error(error);
-        } finally {
-            esconderCarregando();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pagina]);
-
-    useEffect(() => {
-        buscarCampeonatos();
-    }, [buscarCampeonatos]);
+    const {
+        busca,
+        dados: campeonatos,
+        pagina,
+        recarregar,
+        setBusca,
+        setPagina,
+        totalRegistros
+    } = useBuscaPaginada<Campeonatos>('/campeonatos');
 
     const calcularStatus = (inicio: Date, fim: Date) => {
         const hoje = new Date();
@@ -61,9 +38,9 @@ const CampeonatosAdmin = () => {
             <PaginasAdmin
                 titulo="Campeonatos"
                 aoClicarAdicionar={() => setModalAberto(true)}
-                aoClicarApagarBarraPesquisa={() => setBarraPesquisa('')}
-                aoDigitarBarraPesquisa={(evento) => setBarraPesquisa(evento.target.value)}
-                valorBarraPesquisa={barraPesquisa}
+                aoClicarApagarBarraPesquisa={() => setBusca('')}
+                aoDigitarBarraPesquisa={(evento) => setBusca(evento.target.value)}
+                valorBarraPesquisa={busca}
                 aoMudarPaginacao={setPagina}
                 paginacaoAtual={pagina}
                 totalRegistroPaginacao={totalRegistros}
@@ -116,7 +93,7 @@ const CampeonatosAdmin = () => {
             </PaginasAdmin>
             <FormNovoCampeonato
                 aberto={modalAberto}
-                aoCriar={buscarCampeonatos}
+                aoCriar={recarregar}
                 aoFechar={() => setModalAberto(false)}
             />
         </S.Container>

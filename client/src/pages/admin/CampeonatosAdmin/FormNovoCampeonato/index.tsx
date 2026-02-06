@@ -13,11 +13,10 @@ import {
 import { formatarErrosZod } from '../../../../utils/formatarErrosZod';
 import { toast } from 'react-toastify';
 import { useCarregando } from '../../../../contexts/CarregandoContext';
-import type { AxiosError } from 'axios';
-import type { RespostaErro } from '../../../../types/api';
 import { transformarStringParaData } from '../../../../utils/transformarStringParaData';
 import { mascaraAno, mascaraData, mascaraTextoPadrao } from '../../../../utils/mascaras';
 import api from '../../../../services/api';
+import { tratarErro } from '../../../../utils/tratarErro';
 
 interface FormNovoCampeonatoProps {
     aberto: boolean;
@@ -84,23 +83,7 @@ const FormNovoCampeonato = ({ aberto, aoCriar, aoFechar }: FormNovoCampeonatoPro
             aoCancelar();
             aoCriar();
         } catch (error) {
-            const erroAxios = error as AxiosError<RespostaErro>;
-
-            if (!erroAxios.response) {
-                return toast.error('Erro de conexão com o servidor. Tente mais tarde!');
-            }
-
-            const { codigo } = erroAxios.response.data;
-
-            if (codigo === 400) return toast.warning('Campos inválidos!');
-
-            if (codigo === 401) return toast.warning('Entre em sua conta novamente!');
-
-            if (codigo === 403) return toast.error('Acesso negado!');
-
-            if (codigo === 409) return toast.error('Já existe um campeonato com este nome, divisão e ano!');
-
-            if (codigo === 500) return toast.error('Erro no servidor, contate o suporte!');
+            tratarErro(error, setErros);
         } finally {
             esconderCarregando();
         }
@@ -112,7 +95,7 @@ const FormNovoCampeonato = ({ aberto, aoCriar, aoFechar }: FormNovoCampeonatoPro
         setAno('');
         setDataInicio('');
         setDataFim('');
-        setErros({})
+        setErros({});
         aoFechar();
     };
 

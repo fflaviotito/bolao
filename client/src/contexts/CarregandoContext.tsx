@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import Carregando from '../components/Carregando';
 
 interface CarregandoContextDados {
@@ -12,11 +12,22 @@ const CarregandoContext = createContext<CarregandoContextDados>({} as Carregando
 export const CarregandoProvider = ({ children }: { children: ReactNode }) => {
     const [carregando, setCarregando] = useState(false);
 
-    const mostrarCarregando = () => setCarregando(true);
-    const esconderCarregando = () => setCarregando(false);
+    const mostrarCarregando = useCallback(() => {
+        setCarregando(true);
+    }, []);
+
+    const esconderCarregando = useCallback(() => {
+        setCarregando(false);
+    }, []);
+
+    const valor = useMemo(() => ({
+        carregando,
+        mostrarCarregando,
+        esconderCarregando
+    }), [carregando, mostrarCarregando, esconderCarregando]);
 
     return (
-        <CarregandoContext.Provider value={{ carregando, mostrarCarregando, esconderCarregando }}>
+        <CarregandoContext.Provider value={ valor }>
             {children}
             {carregando && <Carregando />}
         </CarregandoContext.Provider>

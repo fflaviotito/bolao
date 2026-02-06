@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import type { Request, Response } from 'express';
+import { errorMiddleware } from './middlewares/errorMiddleware';
 import usuarioRouter from './routes/usuarioRoutes';
 import campeonatoRouter from './routes/campeonatoRoutes';
 
@@ -20,5 +21,7 @@ app.get('/api', (req: Request, res: Response) => {
 
 app.use('/api', usuarioRouter);
 app.use('/api', campeonatoRouter);
+
+app.use(errorMiddleware);
 
 export default app;

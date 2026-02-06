@@ -1,12 +1,20 @@
 import { Request, Response } from 'express';
 import { listarCampeonatos } from '../../services/campeonato/listarCampeonatos';
+import { AppError } from '../../utils/AppError';
 
-export const buscarCampeonatos = async (req: Request, res: Response) => {
-    const pagina = Number(req.query.pagina) || 1;
+interface ConsultaQuery {
+    pagina?: number;
+}
 
-    const itensPorPagina = 25;
+export const buscarCampeonatos = async (
+    req: Request<unknown, unknown, unknown, ConsultaQuery>,
+    res: Response
+) => {
+    const pagina = Number(req.query.pagina);
 
-    const resultado = await listarCampeonatos(pagina, itensPorPagina);
+    if (!pagina) throw new AppError('O parâmetro pagina é obrigatório', 400)
+
+    const resultado = await listarCampeonatos({ pagina });
 
     return res.json(resultado);
 };
