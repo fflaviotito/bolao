@@ -1,4 +1,4 @@
-import * as S from './style';
+import * as S from '@/styles/TabelasAdmin';
 import { useState } from 'react';
 import { useBuscaPaginada } from '@/hooks/useBuscaPaginada';
 import PaginasAdmin from '@/layouts/PaginasAdmin';
@@ -93,8 +93,8 @@ const CampeonatosAdmin = () => {
             </PaginasAdmin>
             <FormNovoCampeonato
                 aberto={modalAberto}
-                aoCriar={recarregar}
                 aoFechar={() => setModalAberto(false)}
+                aoSucesso={recarregar}
             />
         </S.Container>
     );

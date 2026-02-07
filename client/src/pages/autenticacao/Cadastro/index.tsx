@@ -10,7 +10,7 @@ import {
     RodapeCartao
 } from './style';
 import z from 'zod';
-import { emailRegra, nomeUsuarioRegra, senhaForteRegra } from '../../../validators/regras';
+import { emailRegra, nomeUsuarioRegra, senhaForteRegra } from '../../../validators';
 import { toast } from 'react-toastify';
 import { useCarregando } from '../../../contexts/CarregandoContext';
 import type { AxiosError } from 'axios';

@@ -15,7 +15,7 @@ import type { AxiosError } from 'axios';
 import type { RespostaErro } from '../../../types/api';
 import { useNavigate, Link } from 'react-router-dom';
 import z from 'zod';
-import { emailRegra, senhaPuraLogin } from '../../../validators/regras';
+import { emailRegra, senhaPuraLogin } from '../../../validators';
 import { toast } from 'react-toastify';
 import { useCarregando } from '../../../contexts/CarregandoContext';
 

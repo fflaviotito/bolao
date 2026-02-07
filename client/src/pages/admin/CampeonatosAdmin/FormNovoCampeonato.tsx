@@ -1,28 +1,14 @@
-import { useState, type FormEvent } from 'react';
-import InputTexto from '../../../../components/InputTexto';
-import Modal from '../../../../components/Modal';
-import * as S from './style';
-import Botao from '../../../../components/Botao';
 import z from 'zod';
-import {
-    anoRegra,
-    dataBrasileiraRegra,
-    divisaoRegra,
-    nomePadraoRegra
-} from '../../../../validators/regras';
-import { formatarErrosZod } from '../../../../utils/formatarErrosZod';
+import { anoRegra, dataBrasileiraRegra, divisaoRegra, nomePadraoRegra } from '@/validators';
+import { transformarStringParaData, tratarErro, validarFormulario } from '@/utils';
+import type { ModalFormularioProps } from '@/types/modal';
+import { useCarregando } from '@/contexts/CarregandoContext';
+import { useState, type FormEvent } from 'react';
+import api from '@/services/api';
 import { toast } from 'react-toastify';
-import { useCarregando } from '../../../../contexts/CarregandoContext';
-import { transformarStringParaData } from '../../../../utils/transformarStringParaData';
-import { mascaraAno, mascaraData, mascaraTextoPadrao } from '../../../../utils/mascaras';
-import api from '../../../../services/api';
-import { tratarErro } from '../../../../utils/tratarErro';
-
-interface FormNovoCampeonatoProps {
-    aberto: boolean;
-    aoCriar: () => void;
-    aoFechar: () => void;
-}
+import { Botao, InputTexto, Modal } from '@/components';
+import * as S from '@/styles/FormsNovosCadastros';
+import { mascaraAno, mascaraData, mascaraTextoPadrao } from '@/utils/mascaras';
 
 const schema = z
     .object({
@@ -48,7 +34,7 @@ const schema = z
         }
     );
 
-const FormNovoCampeonato = ({ aberto, aoCriar, aoFechar }: FormNovoCampeonatoProps) => {
+const FormNovoCampeonato = ({ aberto, aoFechar, aoSucesso }: ModalFormularioProps) => {
     const { mostrarCarregando, esconderCarregando } = useCarregando();
     const [nome, setNome] = useState('');
     const [divisao, setDivisao] = useState('');
@@ -59,14 +45,14 @@ const FormNovoCampeonato = ({ aberto, aoCriar, aoFechar }: FormNovoCampeonatoPro
 
     const aoEnviar = async (evento: FormEvent) => {
         evento.preventDefault();
-        setErros({});
 
-        const dadosValidos = schema.safeParse({ nome, divisao, ano, dataInicio, dataFim });
-        if (!dadosValidos.success) {
-            const errosFormatados = formatarErrosZod(dadosValidos.error);
-            setErros(errosFormatados);
-            return toast.warning('Verifique os campos destacados!');
-        }
+        const dadosValidos = validarFormulario({
+            schema,
+            dados: { nome, divisao, ano, dataInicio, dataFim },
+            setErros
+        });
+
+        if (!dadosValidos) return;
 
         try {
             mostrarCarregando();
@@ -81,7 +67,7 @@ const FormNovoCampeonato = ({ aberto, aoCriar, aoFechar }: FormNovoCampeonatoPro
 
             toast.success('Campeonato criado com sucesso!');
             aoCancelar();
-            aoCriar();
+            aoSucesso();
         } catch (error) {
             tratarErro(error, setErros);
         } finally {
