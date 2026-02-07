@@ -5,15 +5,16 @@ import { Search, X } from 'lucide-react';
 interface BarraPesquisaProps {
     aoClicarApagar: () => void;
     aoDigitar: (evento: ChangeEvent<HTMLInputElement>) => void;
+    aoPressionarEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
     valor: string;
 }
 
-const BarraPesquisa = ({ aoClicarApagar, aoDigitar, valor }: BarraPesquisaProps) => {
+const BarraPesquisa = ({ aoClicarApagar, aoDigitar, aoPressionarEnter, valor }: BarraPesquisaProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const aoClicarApagarBarraPesquisa = () => {
-        aoClicarApagar()
+        aoClicarApagar();
         inputRef.current?.focus();
-    }
+    };
 
     return (
         <S.Container>
@@ -25,6 +26,7 @@ const BarraPesquisa = ({ aoClicarApagar, aoDigitar, valor }: BarraPesquisaProps)
                 placeholder="Pesquisar..."
                 value={valor}
                 onChange={aoDigitar}
+                onKeyDown={aoPressionarEnter}
                 ref={inputRef}
             />
             {valor && <span onClick={aoClicarApagarBarraPesquisa}>{<X />}</span>}

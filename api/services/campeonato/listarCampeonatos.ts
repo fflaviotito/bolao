@@ -4,11 +4,13 @@ import { selecionarCampeonatosPaginado } from '../../repositories/campeonatoRepo
 import { RetornoPaginado } from '../../types/Paginacao';
 
 interface Parametros {
+    busca: string;
     limite?: number;
     pagina: number;
 }
 
 export const listarCampeonatos = async ({
+    busca,
     limite = CONFIG_PAGINACAO.itensPorPagina,
     pagina
 }: Parametros): Promise<RetornoPaginado<Campeonato>> => {
@@ -16,7 +18,8 @@ export const listarCampeonatos = async ({
 
     const { total, campeonatos } = await selecionarCampeonatosPaginado({
         skip,
-        take: limite
+        take: limite,
+        busca
     });
 
     return {

@@ -2,7 +2,7 @@ import { Plus } from 'lucide-react';
 import Botao from '../../components/Botao';
 import * as S from './style';
 import BarraPesquisa from '../../components/BarraPesquisa';
-import { useEffect, type ChangeEvent, type ReactNode } from 'react';
+import { useEffect, type ChangeEvent, type KeyboardEvent, type ReactNode } from 'react';
 import Paginacao from '../../components/Paginacao';
 
 interface PaginasAdminProps {
@@ -10,6 +10,7 @@ interface PaginasAdminProps {
     aoClicarApagarBarraPesquisa: () => void;
     aoDigitarBarraPesquisa: (evento: ChangeEvent<HTMLInputElement>) => void;
     aoMudarPaginacao: (novaPagina: number) => void;
+    aoPressionarEnter: (evento: KeyboardEvent<HTMLInputElement>) => void;
     children: ReactNode;
     paginacaoAtual: number;
     titulo: string;
@@ -22,6 +23,7 @@ const PaginasAdmin = ({
     aoClicarApagarBarraPesquisa,
     aoDigitarBarraPesquisa,
     aoMudarPaginacao,
+    aoPressionarEnter,
     children,
     paginacaoAtual,
     titulo,
@@ -47,6 +49,7 @@ const PaginasAdmin = ({
             <BarraPesquisa
                 aoClicarApagar={aoClicarApagarBarraPesquisa}
                 aoDigitar={aoDigitarBarraPesquisa}
+                aoPressionarEnter={aoPressionarEnter}
                 valor={valorBarraPesquisa}
             />
             {children}

@@ -16,13 +16,12 @@ interface Campeonatos {
 const CampeonatosAdmin = () => {
     const [modalAberto, setModalAberto] = useState(false);
     const {
-        busca,
         dados: campeonatos,
         pagina,
-        recarregar,
-        setBusca,
         setPagina,
-        totalRegistros
+        totalRegistros,
+        recarregar,
+        busca
     } = useBuscaPaginada<Campeonatos>('/campeonatos');
 
     const calcularStatus = (inicio: Date, fim: Date) => {
@@ -38,9 +37,10 @@ const CampeonatosAdmin = () => {
             <PaginasAdmin
                 titulo="Campeonatos"
                 aoClicarAdicionar={() => setModalAberto(true)}
-                aoClicarApagarBarraPesquisa={() => setBusca('')}
-                aoDigitarBarraPesquisa={(evento) => setBusca(evento.target.value)}
-                valorBarraPesquisa={busca}
+                aoClicarApagarBarraPesquisa={busca.aoLimpar}
+                aoDigitarBarraPesquisa={busca.aoDigitar}
+                aoPressionarEnter={busca.aoPressionarEnter}
+                valorBarraPesquisa={busca.valor}
                 aoMudarPaginacao={setPagina}
                 paginacaoAtual={pagina}
                 totalRegistroPaginacao={totalRegistros}

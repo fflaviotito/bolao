@@ -22,13 +22,22 @@ export const selecionarCampeonatoPorNomeDivisaoAno = async (
     });
 };
 
-export const selecionarCampeonatosPaginado = async ({ skip, take }: ParametrosPaginacao) => {
+export const selecionarCampeonatosPaginado = async ({ skip, take, busca }: ParametrosPaginacao) => {
+    const where = busca ? {
+        OR: [
+            { nome: { contains: busca } },
+            { divisao: { contains: busca } },
+            ...(isNaN(Number(busca))) ? [] : [{ ano: { equals: Number(busca) } }]
+        ]
+    } : {};
+
     const [total, campeonatos] = await prisma.$transaction([
-        prisma.campeonato.count(),
+        prisma.campeonato.count({ where }),
 
         prisma.campeonato.findMany({
-            skip: skip,
-            take: take,
+            skip,
+            take,
+            where,
             orderBy: [{ ano: 'desc' }, { nome: 'asc' }]
         })
     ]);
