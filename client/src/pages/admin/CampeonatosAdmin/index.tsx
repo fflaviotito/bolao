@@ -49,7 +49,7 @@ const CampeonatosAdmin = () => {
                     <S.Tabela>
                         <thead>
                             <tr>
-                                <th style={{ width: '50px' }}>ID</th>
+                                <th style={{ width: '50px' }}>Nº</th>
                                 <th>Nome</th>
                                 <th>Divisão</th>
                                 <th>Ano</th>
@@ -57,12 +57,12 @@ const CampeonatosAdmin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {campeonatos.map((campeonato) => (
+                            {campeonatos.map((campeonato, index) => (
                                 <tr
                                     key={campeonato.id}
                                     onClick={() => console.log('Clicou no', campeonato.id)}
                                 >
-                                    <td>#{campeonato.id}</td>
+                                    <td>{(pagina - 1) * 10 + index + 1}</td>
                                     <td style={{ fontWeight: 'bold', color: '#0f172a' }}>
                                         {campeonato.nome}
                                     </td>

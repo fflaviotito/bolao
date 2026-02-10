@@ -10,7 +10,7 @@ interface DadosNovoCampeonato {
     ano: number;
     dataInicio: Date;
     dataFim: Date;
-    criadoPorId: number;
+    criadoPorId: string;
 }
 
 export const registrarCampeonato = async (dados: DadosNovoCampeonato) => {

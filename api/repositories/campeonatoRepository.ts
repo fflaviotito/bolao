@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client';
 import prisma from '../db';
-import { ParametrosPaginacao } from '../types/Paginacao';
+import { PaginacaoRepositorio } from '../types/Paginacao';
 
 export const inserirCampeonato = async (dados: Prisma.CampeonatoUncheckedCreateInput) => {
     return await prisma.campeonato.create({
@@ -22,7 +22,7 @@ export const selecionarCampeonatoPorNomeDivisaoAno = async (
     });
 };
 
-export const selecionarCampeonatosPaginado = async ({ skip, take, busca }: ParametrosPaginacao) => {
+export const selecionarCampeonatosPaginado = async ({ skip, take, busca }: PaginacaoRepositorio) => {
     const where = busca ? {
         OR: [
             { nome: { contains: busca } },

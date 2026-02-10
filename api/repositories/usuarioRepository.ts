@@ -1,7 +1,7 @@
 import prisma from '../db';
 import type { Prisma } from '@prisma/client';
 
-export const selecionarUsuarioPorId = async (usuarioId: number) => {
+export const selecionarUsuarioPorId = async (usuarioId: string) => {
     return await prisma.usuario.findUnique({
         where: { id: usuarioId }
     });
@@ -46,13 +46,13 @@ export const selecionarTokenRecuperacao = async (token: string) => {
     });
 };
 
-export const deletarTokensPorUsuarioId = async (usuarioId: number) => {
+export const deletarTokensPorUsuarioId = async (usuarioId: string) => {
     return await prisma.tokenRecuperacao.deleteMany({
         where: { usuarioId }
     });
 };
 
-export const atualizarSenhaUsuario = async (usuarioId: number, novaSenhaHash: string) => {
+export const atualizarSenhaUsuario = async (usuarioId: string, novaSenhaHash: string) => {
     return await prisma.usuario.update({
         where: { id: usuarioId },
         data: { senha: novaSenhaHash }

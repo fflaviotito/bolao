@@ -94,7 +94,7 @@ const FormNovoCampeonato = ({ aberto, aoFechar, aoSucesso }: ModalFormularioProp
                     onChange={(evento) => setNome(mascaraTextoPadrao(evento.target.value))}
                     placeholder="Campeonato Brasileiro"
                     value={nome}
-                    required={false}
+                    required={true}
                     erros={erros}
                 />
                 <InputTexto
@@ -103,7 +103,7 @@ const FormNovoCampeonato = ({ aberto, aoFechar, aoSucesso }: ModalFormularioProp
                     onChange={(evento) => setDivisao(mascaraTextoPadrao(evento.target.value))}
                     placeholder="Série A"
                     value={divisao}
-                    required={false}
+                    required={true}
                     erros={erros}
                 />
                 <InputTexto
@@ -112,7 +112,7 @@ const FormNovoCampeonato = ({ aberto, aoFechar, aoSucesso }: ModalFormularioProp
                     onChange={(evento) => setAno(mascaraAno(evento.target.value))}
                     placeholder={new Date().getFullYear().toString()}
                     value={ano}
-                    required={false}
+                    required={true}
                     erros={erros}
                 />
                 <InputTexto
@@ -121,7 +121,7 @@ const FormNovoCampeonato = ({ aberto, aoFechar, aoSucesso }: ModalFormularioProp
                     onChange={(evento) => setDataInicio(mascaraData(evento.target.value))}
                     placeholder={`11/02/${new Date().getFullYear()}`}
                     value={dataInicio}
-                    required={false}
+                    required={true}
                     erros={erros}
                 />
                 <InputTexto
@@ -130,7 +130,7 @@ const FormNovoCampeonato = ({ aberto, aoFechar, aoSucesso }: ModalFormularioProp
                     onChange={(evento) => setDataFim(mascaraData(evento.target.value))}
                     placeholder={`02/11/${new Date().getFullYear()}`}
                     value={dataFim}
-                    required={false}
+                    required={true}
                     erros={erros}
                 />
                 <S.AcoesFormulario>

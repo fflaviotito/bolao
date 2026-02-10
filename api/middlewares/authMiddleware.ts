@@ -21,7 +21,7 @@ export const garantirAuth = (req: Request, res: Response, next: NextFunction) =>
         const secreto = process.env.JWT_SECRET;
         const decodificado = verify(token, secreto) as DadosToken;
 
-        req.usuarioId = Number(decodificado.sub);
+        req.usuarioId = decodificado.sub;
 
         return next();
     } catch (error) {

@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
-import PainelAdmin from '../layouts/PainelAdmin';
-import CampeonatosAdmin from '../pages/admin/CampeonatosAdmin';
+import PainelAdmin from '@/layouts/PainelAdmin';
+import CampeonatosAdmin from '@/pages/admin/CampeonatosAdmin';
+import EstadiosAdmin from '@/pages/admin/EstadiosAdmin';
 
 const RotasAdmin = () => {
     return (
@@ -8,7 +9,7 @@ const RotasAdmin = () => {
             <Route element={<PainelAdmin />}>
                 <Route index element={<h1>Home do Painel do ADM!</h1>} />
                 <Route path="/campeonatos" element={<CampeonatosAdmin />} />
-                <Route path="/estadios" element={<h1>Estádios do Painel do ADM!</h1>} />
+                <Route path="/estadios" element={<EstadiosAdmin />} />
                 <Route path="/times" element={<h1>Times do Painel do ADM!</h1>} />
                 <Route path="/usuarios" element={<h1>Usuários do Painel do ADM!</h1>} />
             </Route>

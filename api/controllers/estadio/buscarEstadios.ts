@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { PaginacaoQuery } from '../../types/Paginacao';
 import { AppError } from '../../utils/AppError';
-import { listarCampeonatos } from '../../services/campeonato/listarCampeonatos';
+import { listarEstadios } from '../../services/estadio/listarEstadios';
 
-export const buscarCampeonatos = async (
+export const buscarEstadios = async (
     req: Request<unknown, unknown, unknown, PaginacaoQuery>,
     res: Response
 ) => {
@@ -12,7 +12,7 @@ export const buscarCampeonatos = async (
 
     if (!pagina) throw new AppError('O parâmetro pagina é obrigatório', 400);
 
-    const resultado = await listarCampeonatos({ busca, pagina });
+    const resultado = await listarEstadios({ busca, pagina });
 
     return res.json(resultado);
 };

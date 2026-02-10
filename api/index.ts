@@ -4,6 +4,7 @@ import type { Request, Response } from 'express';
 import { errorMiddleware } from './middlewares/errorMiddleware';
 import usuarioRouter from './routes/usuarioRoutes';
 import campeonatoRouter from './routes/campeonatoRoutes';
+import estadioRouter from './routes/estadioRoutes';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.get('/api', (req: Request, res: Response) => {
 
 app.use('/api', usuarioRouter);
 app.use('/api', campeonatoRouter);
+app.use('/api', estadioRouter);
 
 app.use(errorMiddleware);
 

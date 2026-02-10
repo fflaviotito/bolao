@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 enum Papel {
@@ -13,49 +13,287 @@ enum Papel {
 }
 
 model Usuario {
-  id              Int         @id @default(autoincrement())
-  nome            String      @db.VarChar(100)
-  email           String      @unique @db.VarChar(100)
-  senha           String      @db.VarChar(255)
-  papel           Papel       @default(user)
-  ativo           Boolean     @default(true)
-  criadoEm        DateTime    @default(now()) @map("criado_em")
-  atualizadoEm    DateTime    @updatedAt @map("atualizado_em")
+  id           String   @id @default(cuid())
+  nome         String   @db.VarChar(100)
+  email        String   @unique @db.VarChar(100)
+  senha        String   @db.VarChar(255)
+  papel        Papel    @default(user)
+  ativo        Boolean  @default(true)
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
 
-  tokensRecuperacao       TokenRecuperacao[]
-  campeonatosCriados      Campeonato[] @relation("CriadorCampeonato")
-  campeonatosAtualizados  Campeonato[] @relation("AtualizadorCampeonato")
+  tokensRecuperacao TokenRecuperacao[]
+
+  campeonatosCriados     Campeonato[] @relation("CriadorCampeonato")
+  campeonatosAtualizados Campeonato[] @relation("AtualizadorCampeonato")
+
+  estadiosCriados     Estadio[] @relation("CriadorEstadio")
+  estadiosAtualizados Estadio[] @relation("AtualizadorEstadio")
+
+  timesCriados     Time[] @relation("CriadorTime")
+  timesAtualizados Time[] @relation("AtualizadorTime")
+
+  timesPorCampeonatoCriados     TimesPorCampeonato[] @relation("CriadorTimesPorCampeonato")
+  timesPorCampeonatoAtualizados TimesPorCampeonato[] @relation("AtualizadorTimesPorCampeonato")
+
+  rodadasCriadas     Rodada[] @relation("CriadorRodada")
+  rodadasAtualizadas Rodada[] @relation("AtualizadorRodada")
+
+  partidasCriadas     Partida[] @relation("CriadorPartida")
+  partidasAtualizadas Partida[] @relation("AtualizadorPartida")
+
+  regrasPontuacaoCriadas     RegrasPontuacao[] @relation("CriadorRegraPontuacao")
+  regrasPontuacaoAtualizadas RegrasPontuacao[] @relation("AtualizadorRegraPontuacao")
+
+  palpitesPartidasFeitos PalpitePartida[] @relation("PalpitePartidaUsuario")
+  palpitesCriados        PalpitePartida[] @relation("CriadorPalpitePartida")
+  palpitesAtualizados    PalpitePartida[] @relation("AtualizadorPalpitePartida")
+
+  palpitesClassificacaoFeitos  PalpiteClassificacao[] @relation("PalpiteClassificacaoUsuario")
+  palpitesClassificacaoCriados PalpiteClassificacao[] @relation("CriadorPalpiteClassificacao")
+  palpitesClassificacaoAtualiz PalpiteClassificacao[] @relation("AtualizadorPalpiteClassificacao")
 
   @@map("usuarios")
 }
 
 model TokenRecuperacao {
-  id          Int         @id @default(autoincrement())
-  token       String      @unique @db.VarChar(255)
-  expiraEm    DateTime    @map("expira_em")
-  criadoEm    DateTime    @default(now()) @map("criado_em")
+  id       String   @id @default(cuid())
+  token    String   @unique @db.VarChar(255)
+  expiraEm DateTime @map("expira_em")
+  criadoEm DateTime @default(now()) @map("criado_em")
 
-  usuarioId   Int         @map("usuario_id")
-  usuario     Usuario     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  usuarioId String  @map("usuario_id")
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
   @@map("tokens_recuperacao")
 }
 
 model Campeonato {
-  id                Int       @id @default(autoincrement())
-  nome              String    @db.VarChar(255)
-  divisao           String    @db.VarChar(255)
-  ano               Int
-  dataInicio        DateTime  @map("data_inicio") @db.Date
-  dataFim           DateTime  @map("data_fim") @db.Date
-  criadoEm          DateTime  @default(now()) @map("criado_em")
-  atualizadoEm      DateTime  @updatedAt @map("atualizado_em")
+  id           String   @id @default(cuid())
+  nome         String   @db.VarChar(255)
+  divisao      String   @db.VarChar(255)
+  ano          Int
+  dataInicio   DateTime @map("data_inicio") @db.Date
+  dataFim      DateTime @map("data_fim") @db.Date
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
 
-  criadoPorId       Int       @map("criado_por_id")
-  criadoPor         Usuario   @relation("CriadorCampeonato", fields: [criadoPorId], references: [id])
+  criadoPorId String  @map("criado_por_id")
+  criadoPor   Usuario @relation("CriadorCampeonato", fields: [criadoPorId], references: [id])
 
-  atualizadoPorId   Int?      @map("atualizado_por_id")
-  atualizadoPor     Usuario?  @relation("AtualizadorCampeonato", fields: [atualizadoPorId], references: [id])
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorCampeonato", fields: [atualizadoPorId], references: [id])
+
+  timesParticipantes    TimesPorCampeonato[]
+  rodadas               Rodada[]
+  regrasPontuacao       RegrasPontuacao?
+  palpitesClassificacao PalpiteClassificacao[]
 
   @@map("campeonatos")
+}
+
+model Estadio {
+  id          String  @id @default(cuid())
+  nomeOficial String? @map("nome_oficial") @db.VarChar(100)
+  nomePopular String  @map("nome_popular") @db.VarChar(60)
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorEstadio", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorEstadio", fields: [atualizadoPorId], references: [id])
+
+  times    Time[]
+  partidas Partida[]
+
+  @@map("estadios")
+}
+
+model Time {
+  id          String  @id @default(cuid())
+  nomeOficial String? @map("nome_oficial") @db.VarChar(100)
+  nomePopular String  @map("nome_popular") @db.VarChar(60)
+  sigla       String  @db.VarChar(3)
+  escudo      String  @db.VarChar(255)
+
+  estadioId String?  @map("estadio_id")
+  estadio   Estadio? @relation(fields: [estadioId], references: [id])
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorTime", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorTime", fields: [atualizadoPorId], references: [id])
+
+  campeonatosDisputados          TimesPorCampeonato[]
+  partidasComoMandante           Partida[]              @relation("MandantePartida")
+  partidasComoVisitante          Partida[]              @relation("VisitantePartida")
+  palpitesRecebidosClassificacao PalpiteClassificacao[]
+
+  @@map("times")
+}
+
+model TimesPorCampeonato {
+  id String @id @default(cuid())
+
+  campeonatoId String     @map("campeonato_id")
+  campeonato   Campeonato @relation(fields: [campeonatoId], references: [id])
+
+  timeId String @map("time_id")
+  time   Time   @relation(fields: [timeId], references: [id])
+
+  ponto      Int @default(0)
+  partida    Int @default(0)
+  vitoria    Int @default(0)
+  derrota    Int @default(0)
+  empate     Int @default(0)
+  golProprio Int @default(0) @map("gol_proprio")
+  golSofrido Int @default(0) @map("gol_sofrido")
+  saldoGol   Int @default(0) @map("saldo_gol")
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorTimesPorCampeonato", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorTimesPorCampeonato", fields: [atualizadoPorId], references: [id])
+
+  @@unique([campeonatoId, timeId])
+  @@map("times_campeonato")
+}
+
+model Rodada {
+  id     String @id @default(cuid())
+  nome   String @db.VarChar(30)
+  numero Int
+
+  campeonatoId String     @map("campeonato_id")
+  campeonato   Campeonato @relation(fields: [campeonatoId], references: [id])
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorRodada", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorRodada", fields: [atualizadoPorId], references: [id])
+
+  partidasDisputadas Partida[]
+
+  @@unique([campeonatoId, numero])
+  @@map("rodadas")
+}
+
+model Partida {
+  id String @id @default(cuid())
+
+  rodadaId String @map("rodada_id")
+  rodada   Rodada @relation(fields: [rodadaId], references: [id])
+
+  data DateTime
+
+  estadioId String?  @map("estadio_id")
+  estadio   Estadio? @relation(fields: [estadioId], references: [id])
+
+  timeMandanteId String @map("time_mandante_id")
+  timeMandante   Time   @relation("MandantePartida", fields: [timeMandanteId], references: [id])
+  golMandante    Int    @default(0) @map("gol_mandante")
+
+  timeVisitanteId String @map("time_visitante_id")
+  timeVisitante   Time   @relation("VisitantePartida", fields: [timeVisitanteId], references: [id])
+  golVisitante    Int    @default(0) @map("gol_visitante")
+
+  finalizado Boolean @default(false)
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorPartida", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorPartida", fields: [atualizadoPorId], references: [id])
+
+  palpites PalpitePartida[]
+
+  @@map("partidas")
+}
+
+model RegrasPontuacao {
+  id String @id @default(cuid())
+
+  campeonatoId String     @unique @map("campeonato_id")
+  campeonato   Campeonato @relation(fields: [campeonatoId], references: [id])
+
+  pontosEmpateExato    Int @default(5) @map("acerto_empate_exato")
+  pontosAcertoEmpate   Int @default(2) @map("acerto_empate")
+  pontosPlacarExato    Int @default(4) @map("acerto_placar")
+  pontosAcertoVencedor Int @default(1) @map("acerto_vencedor")
+  pontosGolTime        Int @default(1) @map("acerto_gol")
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorRegraPontuacao", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorRegraPontuacao", fields: [atualizadoPorId], references: [id])
+
+  @@map("regras_pontuacao")
+}
+
+model PalpitePartida {
+  id String @id @default(cuid())
+
+  usuarioId String  @map("usuario_id")
+  usuario   Usuario @relation("PalpitePartidaUsuario", fields: [usuarioId], references: [id])
+
+  partidaId String  @map("partida_id")
+  partida   Partida @relation(fields: [partidaId], references: [id])
+
+  golMandante  Int @map("gol_mandante")
+  golVisitante Int @map("gol_visitante")
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorPalpitePartida", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorPalpitePartida", fields: [atualizadoPorId], references: [id])
+
+  @@unique([usuarioId, partidaId])
+  @@map("palpites_partida")
+}
+
+model PalpiteClassificacao {
+  id String @id @default(cuid())
+
+  usuarioId String  @map("usuario_id")
+  usuario   Usuario @relation("PalpiteClassificacaoUsuario", fields: [usuarioId], references: [id])
+
+  campeonatoId String     @map("campeonato_id")
+  campeonato   Campeonato @relation(fields: [campeonatoId], references: [id])
+
+  timeId String @map("time_id")
+  time   Time   @relation(fields: [timeId], references: [id])
+
+  posicao       Int
+  pontosGerados Int @default(0) @map("pontos_gerados")
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorPalpiteClassificacao", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorPalpiteClassificacao", fields: [atualizadoPorId], references: [id])
+
+  @@unique([usuarioId, campeonatoId, posicao])
+  @@unique([usuarioId, campeonatoId, timeId])
+  @@map("palpites_classificacao")
 }
