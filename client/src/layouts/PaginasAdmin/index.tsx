@@ -1,34 +1,24 @@
-import { Plus } from 'lucide-react';
-import Botao from '../../components/Botao';
+import type { BarraPesquisaProps } from '@/components/BarraPesquisa';
+import type { PaginacaoProps } from '@/components/Paginacao';
+import { useEffect, type ReactNode } from 'react';
 import * as S from './style';
-import BarraPesquisa from '../../components/BarraPesquisa';
-import { useEffect, type ChangeEvent, type KeyboardEvent, type ReactNode } from 'react';
-import Paginacao from '../../components/Paginacao';
+import { Plus } from 'lucide-react';
+import { BarraPesquisa, Botao, Paginacao } from '@/components';
 
 interface PaginasAdminProps {
     aoClicarAdicionar: () => void;
-    aoClicarApagarBarraPesquisa: () => void;
-    aoDigitarBarraPesquisa: (evento: ChangeEvent<HTMLInputElement>) => void;
-    aoMudarPaginacao: (novaPagina: number) => void;
-    aoPressionarEnter: (evento: KeyboardEvent<HTMLInputElement>) => void;
+    barraPesquisa: BarraPesquisaProps;
     children: ReactNode;
-    paginacaoAtual: number;
+    paginacao: PaginacaoProps;
     titulo: string;
-    totalRegistroPaginacao: number;
-    valorBarraPesquisa: string;
 }
 
 const PaginasAdmin = ({
     aoClicarAdicionar,
-    aoClicarApagarBarraPesquisa,
-    aoDigitarBarraPesquisa,
-    aoMudarPaginacao,
-    aoPressionarEnter,
+    barraPesquisa,
     children,
-    paginacaoAtual,
-    titulo,
-    totalRegistroPaginacao,
-    valorBarraPesquisa
+    paginacao,
+    titulo
 }: PaginasAdminProps) => {
     useEffect(() => {
         document.title = 'Bolão | Painel de administração';
@@ -47,16 +37,16 @@ const PaginasAdmin = ({
                 />
             </S.Cabecalho>
             <BarraPesquisa
-                aoClicarApagar={aoClicarApagarBarraPesquisa}
-                aoDigitar={aoDigitarBarraPesquisa}
-                aoPressionarEnter={aoPressionarEnter}
-                valor={valorBarraPesquisa}
+                aoDigitar={barraPesquisa.aoDigitar}
+                aoLimpar={barraPesquisa.aoLimpar}
+                aoPressionarEnter={barraPesquisa.aoPressionarEnter}
+                valor={barraPesquisa.valor}
             />
             {children}
             <Paginacao
-                paginaAtual={paginacaoAtual}
-                totalRegistros={totalRegistroPaginacao}
-                aoMudarPagina={aoMudarPaginacao}
+                pagina={paginacao.pagina}
+                setPagina={paginacao.setPagina}
+                totalRegistros={paginacao.totalRegistros}
             />
         </>
     );

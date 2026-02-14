@@ -1,28 +1,28 @@
 import * as S from './style';
 
-interface PaginacaoProps {
-    aoMudarPagina: (novaPagina: number) => void;
+export interface PaginacaoProps {
     itensPorPagina?: number;
-    paginaAtual: number;
+    pagina: number;
+    setPagina: React.Dispatch<React.SetStateAction<number>>;
     totalRegistros: number;
 }
 
 const Paginacao = ({
-    aoMudarPagina,
+    setPagina,
     itensPorPagina = 25,
-    paginaAtual,
+    pagina,
     totalRegistros
 }: PaginacaoProps) => {
     const totalPaginas = Math.ceil(totalRegistros / itensPorPagina);
-    const primeiroItem = (paginaAtual - 1) * itensPorPagina + 1;
-    const ultimoItem = Math.min(paginaAtual * itensPorPagina, totalRegistros);
+    const primeiroItem = (pagina - 1) * itensPorPagina + 1;
+    const ultimoItem = Math.min(pagina * itensPorPagina, totalRegistros);
 
     const anterior = () => {
-        if (paginaAtual > 1) aoMudarPagina(paginaAtual - 1);
+        if (pagina > 1) setPagina(pagina - 1);
     };
 
     const proximo = () => {
-        if (paginaAtual < totalPaginas) aoMudarPagina(paginaAtual + 1);
+        if (pagina < totalPaginas) setPagina(pagina + 1);
     };
 
     if (totalRegistros === 0) return null;
@@ -34,13 +34,13 @@ const Paginacao = ({
                 <span>{totalRegistros}</span> resultados
             </S.Info>
             <S.Controles>
-                <button type="button" onClick={anterior} disabled={paginaAtual === 1}>
+                <button type="button" onClick={anterior} disabled={pagina === 1}>
                     Anterior
                 </button>
                 <span>
-                    {paginaAtual} de {totalPaginas}
+                    {pagina} de {totalPaginas}
                 </span>
-                <button type="button" onClick={proximo} disabled={paginaAtual === totalPaginas}>
+                <button type="button" onClick={proximo} disabled={pagina === totalPaginas}>
                     Anterior
                 </button>
             </S.Controles>

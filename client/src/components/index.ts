@@ -6,3 +6,4 @@ export { default as MenuNavegacaoAdmin } from './MenuNavegacaoAdmin';
 export { default as Modal } from './Modal';
 export { default as Paginacao } from './Paginacao';
 export { default as Rodape } from './Rodape';
+export { default as SelectComBusca } from './SelectComBusca';

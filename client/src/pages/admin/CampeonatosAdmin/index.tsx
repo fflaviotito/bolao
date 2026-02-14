@@ -16,12 +16,10 @@ interface Campeonatos {
 const CampeonatosAdmin = () => {
     const [modalAberto, setModalAberto] = useState(false);
     const {
+        busca,
         dados: campeonatos,
-        pagina,
-        setPagina,
-        totalRegistros,
-        recarregar,
-        busca
+        paginacao,
+        recarregar
     } = useBuscaPaginada<Campeonatos>('/campeonatos');
 
     const calcularStatus = (inicio: Date, fim: Date) => {
@@ -35,15 +33,10 @@ const CampeonatosAdmin = () => {
     return (
         <S.Container>
             <PaginasAdmin
-                titulo="Campeonatos"
                 aoClicarAdicionar={() => setModalAberto(true)}
-                aoClicarApagarBarraPesquisa={busca.aoLimpar}
-                aoDigitarBarraPesquisa={busca.aoDigitar}
-                aoPressionarEnter={busca.aoPressionarEnter}
-                valorBarraPesquisa={busca.valor}
-                aoMudarPaginacao={setPagina}
-                paginacaoAtual={pagina}
-                totalRegistroPaginacao={totalRegistros}
+                barraPesquisa={busca}
+                paginacao={paginacao}
+                titulo="Campeonatos"
             >
                 <S.TabelaContainer>
                     <S.Tabela>
@@ -62,7 +55,7 @@ const CampeonatosAdmin = () => {
                                     key={campeonato.id}
                                     onClick={() => console.log('Clicou no', campeonato.id)}
                                 >
-                                    <td>{(pagina - 1) * 10 + index + 1}</td>
+                                    <td>{(paginacao.pagina - 1) * 10 + index + 1}</td>
                                     <td style={{ fontWeight: 'bold', color: '#0f172a' }}>
                                         {campeonato.nome}
                                     </td>

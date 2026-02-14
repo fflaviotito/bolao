@@ -1,27 +1,5 @@
-import { CONFIG_PAGINACAO } from '../../constants/config';
-import { FiltroListagem, RetornoPaginado } from '../../types/Paginacao';
-import { Estadio } from '@prisma/client';
-import { selecionarEstadiosPaginado } from '../../repositories/estadioRepository';
+import { selecionarTodosEstadios } from '../../repositories/estadioRepository';
 
-export const listarEstadios = async ({
-    busca,
-    limite = CONFIG_PAGINACAO.itensPorPagina,
-    pagina
-}: FiltroListagem): Promise<RetornoPaginado<Estadio>> => {
-    const skip = (pagina - 1) * limite;
-
-    const { total, estadios } = await selecionarEstadiosPaginado({
-        skip,
-        take: limite,
-        busca
-    });
-
-    return {
-        dados: estadios,
-        paginacao: {
-            itensPorPagina: limite,
-            totalPaginas: Math.ceil(total / limite),
-            totalRegistros: total
-        }
-    };
+export const listarEstadios = async (busca: string, limite: number = 100) => {
+    return await selecionarTodosEstadios(busca, limite);
 };

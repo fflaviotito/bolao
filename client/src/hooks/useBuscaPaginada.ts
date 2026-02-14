@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState, type ChangeEvent, type KeyboardEvent 
 interface Parametros {
     pagina: number;
     busca?: string;
+    paginar: boolean;
 }
 
 export const useBuscaPaginada = <T>(urlGet: string) => {
@@ -19,7 +20,7 @@ export const useBuscaPaginada = <T>(urlGet: string) => {
     const buscarDados = useCallback(async () => {
         try {
             mostrarCarregando();
-            const params: Parametros = { pagina };
+            const params: Parametros = { pagina, paginar: true };
 
             if (buscaOficial.trim()) {
                 params.busca = buscaOficial;
@@ -62,16 +63,18 @@ export const useBuscaPaginada = <T>(urlGet: string) => {
 
     return {
         dados,
-        totalRegistros,
-        pagina,
-        setPagina,
         recarregar: buscarDados,
+        paginacao: {
+            pagina,
+            setPagina,
+            totalRegistros
+        },
         busca: {
-            valor: textoDigitado,
-            aoDigitar,
             aoConfirmar: confirmarBusca,
+            aoDigitar,
+            aoLimpar: limparBusca,
             aoPressionarEnter,
-            aoLimpar: limparBusca
+            valor: textoDigitado
         }
     };
 };

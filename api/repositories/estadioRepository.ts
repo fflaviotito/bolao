@@ -8,6 +8,12 @@ export const inserirEstadio = async (dados: Prisma.EstadioUncheckedCreateInput) 
     });
 };
 
+export const selecionarTodosEstadios = async (busca: string, limite:number) => {
+    const where = busca ? { nomePopular: { contains: busca } } : {};
+
+    return await prisma.estadio.findMany({ where, take:limite, orderBy: [{ nomePopular: 'asc' }] });
+};
+
 export const selecionarEstadiosPaginado = async ({ skip, take, busca }: PaginacaoRepositorio) => {
     const where = busca ? { nomePopular: { contains: busca } } : {};
 
@@ -25,7 +31,16 @@ export const selecionarEstadiosPaginado = async ({ skip, take, busca }: Paginaca
     return { total, estadios };
 };
 
-export const selecionarEstadioPorNome = async (nomePopular: string, nomeOficial?: string | null) => {
+export const selecionarEstadioPorId = async (id: string) => {
+    return await prisma.estadio.findUnique({
+        where: { id }
+    });
+};
+
+export const selecionarEstadioPorNome = async (
+    nomePopular: string,
+    nomeOficial?: string | null
+) => {
     return await prisma.estadio.findFirst({
         where: {
             OR: [{ nomePopular }, ...(nomeOficial ? [{ nomeOficial }] : [])]

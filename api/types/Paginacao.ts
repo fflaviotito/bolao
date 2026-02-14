@@ -7,6 +7,7 @@ export interface FiltroListagem {
 export interface PaginacaoQuery {
     busca?: string;
     pagina?: number;
+    paginar?: 'true' | 'false';
 }
 
 export interface PaginacaoRepositorio {

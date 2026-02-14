@@ -2,9 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import type { Request, Response } from 'express';
 import { errorMiddleware } from './middlewares/errorMiddleware';
-import usuarioRouter from './routes/usuarioRoutes';
-import campeonatoRouter from './routes/campeonatoRoutes';
-import estadioRouter from './routes/estadioRoutes';
+import * as R from './routes';
 
 const app = express();
 
@@ -20,9 +18,7 @@ app.get('/api', (req: Request, res: Response) => {
     res.send('Backend do Bolão está ON!');
 });
 
-app.use('/api', usuarioRouter);
-app.use('/api', campeonatoRouter);
-app.use('/api', estadioRouter);
+app.use('/api', Object.values(R));
 
 app.use(errorMiddleware);
 

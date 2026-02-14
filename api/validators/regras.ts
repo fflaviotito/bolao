@@ -55,3 +55,18 @@ export const dataRegra = z
         const [dia, mes, ano] = dataString.split('/').map(Number);
         return new Date(ano, mes - 1, dia);
     });
+
+export const escudoRegra = z
+    .string('A URL do escudo é obrigatória')
+    .regex(/^https?:\/\//i, 'O link deve começar com http:// ou https://')
+    .refine(
+        (url) => /\.(jpeg|jpg|gif|png|svg|webp)($|\?)/i.test(url),
+        'A URL deve terminar com uma extensão de imagem válida (.png, .jpg, .svg, etc)'
+    );
+
+export const siglaTimeRegra = z
+    .string()
+    .trim()
+    .toUpperCase()
+    .length(3, 'A sigla deve conter exatas 3 letras')
+    .regex(/^[A-Z]+$/, 'A sigla deve conter apenas letras');

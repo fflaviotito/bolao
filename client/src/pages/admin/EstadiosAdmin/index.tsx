@@ -5,7 +5,7 @@ import PaginasAdmin from '@/layouts/PaginasAdmin';
 import FormNovoEstadio from './FormNovoEstadio';
 
 interface Estadios {
-    id: string
+    id: string;
     nomeOficial: string;
     nomePopular: string;
 }
@@ -15,24 +15,17 @@ const EstadiosAdmin = () => {
     const {
         busca,
         dados: estadios,
-        pagina,
-        recarregar,
-        setPagina,
-        totalRegistros
+        paginacao,
+        recarregar
     } = useBuscaPaginada<Estadios>('/estadios');
 
     return (
         <S.Container>
             <PaginasAdmin
-                titulo="Estádios"
                 aoClicarAdicionar={() => setModalAberto(true)}
-                aoClicarApagarBarraPesquisa={busca.aoLimpar}
-                aoDigitarBarraPesquisa={busca.aoDigitar}
-                aoPressionarEnter={busca.aoPressionarEnter}
-                valorBarraPesquisa={busca.valor}
-                aoMudarPaginacao={setPagina}
-                paginacaoAtual={pagina}
-                totalRegistroPaginacao={totalRegistros}
+                barraPesquisa={busca}
+                paginacao={paginacao}
+                titulo="Estádios"
             >
                 <S.TabelaContainer>
                     <S.Tabela>
@@ -45,11 +38,11 @@ const EstadiosAdmin = () => {
                         </thead>
                         <tbody>
                             {estadios.map((estadio, index) => (
-                                <tr
-                                    key={estadio.id}
-                                >
-                                    <td>{(pagina - 1) * 10 + index + 1}</td>
-                                    <td>{estadio.nomePopular}</td>
+                                <tr key={estadio.id}>
+                                    <td>{(paginacao.pagina - 1) * 10 + index + 1}</td>
+                                    <td style={{ fontWeight: 'bold', color: '#0f172a' }}>
+                                        {estadio.nomePopular}
+                                    </td>
                                     <td>{estadio.nomeOficial}</td>
                                 </tr>
                             ))}
@@ -63,7 +56,7 @@ const EstadiosAdmin = () => {
                 aoSucesso={recarregar}
             />
         </S.Container>
-    )
+    );
 };
 
 export default EstadiosAdmin;

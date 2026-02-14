@@ -1,18 +1,24 @@
-import { useRef, type ChangeEvent } from 'react';
+import { useRef, type ChangeEvent, type KeyboardEvent } from 'react';
 import * as S from './style';
 import { Search, X } from 'lucide-react';
 
-interface BarraPesquisaProps {
-    aoClicarApagar: () => void;
+export interface BarraPesquisaProps {
+    aoConfirmar?: () => void;
     aoDigitar: (evento: ChangeEvent<HTMLInputElement>) => void;
-    aoPressionarEnter?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    aoLimpar: () => void;
+    aoPressionarEnter: (evento: KeyboardEvent<HTMLInputElement>) => void;
     valor: string;
 }
 
-const BarraPesquisa = ({ aoClicarApagar, aoDigitar, aoPressionarEnter, valor }: BarraPesquisaProps) => {
+const BarraPesquisa = ({
+    aoLimpar,
+    aoDigitar,
+    aoPressionarEnter,
+    valor
+}: BarraPesquisaProps) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const aoClicarApagarBarraPesquisa = () => {
-        aoClicarApagar();
+        aoLimpar();
         inputRef.current?.focus();
     };
 
