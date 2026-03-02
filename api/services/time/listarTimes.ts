@@ -1,27 +1,5 @@
-import { CONFIG_PAGINACAO } from '../../constants/config';
-import { FiltroListagem, RetornoPaginado } from '../../types/Paginacao';
-import { Time } from '@prisma/client';
-import { selecionarTimesPaginado } from '../../repositories/timeRepository';
+import { selecionarTodosTimes } from '../../repositories/timeRepository';
 
-export const listarTimes = async ({
-    busca,
-    limite = CONFIG_PAGINACAO.itensPorPagina,
-    pagina
-}: FiltroListagem): Promise<RetornoPaginado<Time>> => {
-    const skip = (pagina - 1) * limite;
-
-    const { total, times } = await selecionarTimesPaginado({
-        skip,
-        take: limite,
-        busca
-    });
-
-    return {
-        dados: times,
-        paginacao: {
-            itensPorPagina: limite,
-            totalPaginas: Math.ceil(total / limite),
-            totalRegistros: total
-        }
-    };
+export const listarTimes = async (busca: string, limite: number = 100) => {
+    return await selecionarTodosTimes(busca, limite);
 };

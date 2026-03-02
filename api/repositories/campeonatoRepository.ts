@@ -8,6 +8,12 @@ export const inserirCampeonato = async (dados: Prisma.CampeonatoUncheckedCreateI
     });
 };
 
+export const selecionarCampeonatoPorId = async (id: string) => {
+    return await prisma.campeonato.findUnique({
+        where: { id }
+    });
+};
+
 export const selecionarCampeonatoPorNomeDivisaoAno = async (
     nome: string,
     divisao: string,
@@ -22,14 +28,20 @@ export const selecionarCampeonatoPorNomeDivisaoAno = async (
     });
 };
 
-export const selecionarCampeonatosPaginado = async ({ skip, take, busca }: PaginacaoRepositorio) => {
-    const where = busca ? {
-        OR: [
-            { nome: { contains: busca } },
-            { divisao: { contains: busca } },
-            ...(isNaN(Number(busca))) ? [] : [{ ano: { equals: Number(busca) } }]
-        ]
-    } : {};
+export const selecionarCampeonatosPaginado = async ({
+    skip,
+    take,
+    busca
+}: PaginacaoRepositorio) => {
+    const where = busca
+        ? {
+              OR: [
+                  { nome: { contains: busca } },
+                  { divisao: { contains: busca } },
+                  ...(isNaN(Number(busca)) ? [] : [{ ano: { equals: Number(busca) } }])
+              ]
+          }
+        : {};
 
     const [total, campeonatos] = await prisma.$transaction([
         prisma.campeonato.count({ where }),

@@ -35,3 +35,8 @@ export const selecionarTimePorNome = async (nomePopular: string, nomeOficial?: s
         }
     });
 };
+
+export const selecionarTodosTimes = async (busca: string, limite: number) => {
+    const where = busca ? { nomePopular: { contains: busca } } : {};
+    return await prisma.time.findMany({ where, take: limite, orderBy: [{ nomePopular: 'asc' }] });
+};

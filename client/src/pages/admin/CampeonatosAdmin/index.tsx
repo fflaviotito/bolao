@@ -1,6 +1,7 @@
-import * as S from '@/styles/TabelasAdmin';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useBuscaPaginada } from '@/hooks/useBuscaPaginada';
+import * as S from '@/styles/TabelasAdmin';
 import PaginasAdmin from '@/layouts/PaginasAdmin';
 import FormNovoCampeonato from './FormNovoCampeonato';
 
@@ -14,6 +15,7 @@ interface Campeonatos {
 }
 
 const CampeonatosAdmin = () => {
+    const navigate = useNavigate();
     const [modalAberto, setModalAberto] = useState(false);
     const {
         busca,
@@ -53,7 +55,7 @@ const CampeonatosAdmin = () => {
                             {campeonatos.map((campeonato, index) => (
                                 <tr
                                     key={campeonato.id}
-                                    onClick={() => console.log('Clicou no', campeonato.id)}
+                                    onClick={() => navigate(`/admin/campeonatos/${campeonato.id}`)}
                                 >
                                     <td>{(paginacao.pagina - 1) * 10 + index + 1}</td>
                                     <td style={{ fontWeight: 'bold', color: '#0f172a' }}>

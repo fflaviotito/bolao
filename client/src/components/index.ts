@@ -1,5 +1,6 @@
 export { default as BarraPesquisa } from './BarraPesquisa';
 export { default as Botao } from './Botao';
+export { default as CardAcao } from './CardAcao';
 export { default as Carregando } from './Carregando';
 export { default as InputTexto } from './InputTexto';
 export { default as MenuNavegacaoAdmin } from './MenuNavegacaoAdmin';

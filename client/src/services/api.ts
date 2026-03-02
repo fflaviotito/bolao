@@ -14,4 +14,20 @@ api.interceptors.request.use((configuracao) => {
     return configuracao;
 });
 
+api.interceptors.response.use(
+    (resposta) => {
+        return resposta;
+    },
+    (erro) => {
+        if (erro.response && erro.response.status === 401) {
+            if (window.location.pathname !== '/entrar') {
+                localStorage.removeItem('bolao:token');
+                localStorage.removeItem('bolao:usuario');
+                window.location.href = '/entrar';
+            }
+        }
+        return Promise.reject(erro);
+    }
+);
+
 export default api;
