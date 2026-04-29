@@ -37,8 +37,12 @@ export const selecionarTodasCampanhasPorCampeonato = async (campeonatoId: string
         include: {
             time: true
         },
-        orderBy: {
-            time: { nomePopular: 'asc' }
-        }
+        orderBy: [
+            { ponto: 'desc' },
+            { vitoria: 'desc' },
+            { saldoGol: 'desc' },
+            { golProprio: 'desc' },
+            { time: { nomePopular: 'asc' } }
+        ]
     });
 };
