@@ -12,7 +12,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@prisma/client": "5.10.0",
+    "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -35,7 +35,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.6.2",
-    "prisma": "5.10.0",
+    "prisma": "^6.19.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
