@@ -1,0 +1,23 @@
+model Campeonato {
+  id           String   @id @default(cuid())
+  nome         String   @db.VarChar(255)
+  divisao      String   @db.VarChar(255)
+  ano          Int
+  dataInicio   DateTime @map("data_inicio") @db.Date
+  dataFim      DateTime @map("data_fim") @db.Date
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  criadoPorId String  @map("criado_por_id")
+  criadoPor   Usuario @relation("CriadorCampeonato", fields: [criadoPorId], references: [id])
+
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorCampeonato", fields: [atualizadoPorId], references: [id])
+
+  timesParticipantes    TimesPorCampeonato[]
+  rodadas               Rodada[]
+  regrasPontuacao       RegrasPontuacao?
+  palpitesClassificacao PalpiteClassificacao[]
+
+  @@map("campeonatos")
+}

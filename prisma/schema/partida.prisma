@@ -1,0 +1,33 @@
+model Partida {
+  id String @id @default(cuid())
+
+  rodadaId String @map("rodada_id")
+  rodada   Rodada @relation(fields: [rodadaId], references: [id])
+
+  data DateTime
+
+  estadioId String?  @map("estadio_id")
+  estadio   Estadio? @relation(fields: [estadioId], references: [id])
+
+  timeMandanteId String @map("time_mandante_id")
+  timeMandante   Time   @relation("MandantePartida", fields: [timeMandanteId], references: [id])
+  golMandante    Int    @default(0) @map("gol_mandante")
+
+  timeVisitanteId String @map("time_visitante_id")
+  timeVisitante   Time   @relation("VisitantePartida", fields: [timeVisitanteId], references: [id])
+  golVisitante    Int    @default(0) @map("gol_visitante")
+
+  finalizado Boolean @default(false)
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorPartida", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorPartida", fields: [atualizadoPorId], references: [id])
+
+  palpites PalpitePartida[]
+
+  @@map("partidas")
+}

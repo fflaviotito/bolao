@@ -1,0 +1,23 @@
+model PalpitePartida {
+  id String @id @default(cuid())
+
+  usuarioId String  @map("usuario_id")
+  usuario   Usuario @relation("PalpitePartidaUsuario", fields: [usuarioId], references: [id])
+
+  partidaId String  @map("partida_id")
+  partida   Partida @relation(fields: [partidaId], references: [id])
+
+  golMandante  Int @map("gol_mandante")
+  golVisitante Int @map("gol_visitante")
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorPalpitePartida", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorPalpitePartida", fields: [atualizadoPorId], references: [id])
+
+  @@unique([usuarioId, partidaId])
+  @@map("palpites_partida")
+}

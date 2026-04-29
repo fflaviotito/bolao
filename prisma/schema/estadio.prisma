@@ -1,0 +1,18 @@
+model Estadio {
+  id          String  @id @default(cuid())
+  nomeOficial String? @map("nome_oficial") @db.VarChar(100)
+  nomePopular String  @map("nome_popular") @db.VarChar(60)
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorEstadio", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorEstadio", fields: [atualizadoPorId], references: [id])
+
+  times    Time[]
+  partidas Partida[]
+
+  @@map("estadios")
+}

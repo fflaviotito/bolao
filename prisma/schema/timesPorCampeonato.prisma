@@ -1,0 +1,29 @@
+model TimesPorCampeonato {
+  id String @id @default(cuid())
+
+  campeonatoId String     @map("campeonato_id")
+  campeonato   Campeonato @relation(fields: [campeonatoId], references: [id])
+
+  timeId String @map("time_id")
+  time   Time   @relation(fields: [timeId], references: [id])
+
+  ponto      Int @default(0)
+  partida    Int @default(0)
+  vitoria    Int @default(0)
+  derrota    Int @default(0)
+  empate     Int @default(0)
+  golProprio Int @default(0) @map("gol_proprio")
+  golSofrido Int @default(0) @map("gol_sofrido")
+  saldoGol   Int @default(0) @map("saldo_gol")
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorTimesPorCampeonato", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorTimesPorCampeonato", fields: [atualizadoPorId], references: [id])
+
+  @@unique([campeonatoId, timeId])
+  @@map("times_campeonato")
+}

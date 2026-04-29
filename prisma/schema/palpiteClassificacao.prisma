@@ -1,0 +1,27 @@
+model PalpiteClassificacao {
+  id String @id @default(cuid())
+
+  usuarioId String  @map("usuario_id")
+  usuario   Usuario @relation("PalpiteClassificacaoUsuario", fields: [usuarioId], references: [id])
+
+  campeonatoId String     @map("campeonato_id")
+  campeonato   Campeonato @relation(fields: [campeonatoId], references: [id])
+
+  timeId String @map("time_id")
+  time   Time   @relation(fields: [timeId], references: [id])
+
+  posicao       Int
+  pontosGerados Int @default(0) @map("pontos_gerados")
+
+  criadoEm    DateTime @default(now()) @map("criado_em")
+  criadoPorId String   @map("criado_por_id")
+  criadoPor   Usuario  @relation("CriadorPalpiteClassificacao", fields: [criadoPorId], references: [id])
+
+  atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+  atualizadoPorId String?  @map("atualizado_por_id")
+  atualizadoPor   Usuario? @relation("AtualizadorPalpiteClassificacao", fields: [atualizadoPorId], references: [id])
+
+  @@unique([usuarioId, campeonatoId, posicao])
+  @@unique([usuarioId, campeonatoId, timeId])
+  @@map("palpites_classificacao")
+}
