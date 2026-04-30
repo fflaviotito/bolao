@@ -40,9 +40,12 @@ model Usuario {
   palpitesCriados        PalpitePartida[] @relation("CriadorPalpitePartida")
   palpitesAtualizados    PalpitePartida[] @relation("AtualizadorPalpitePartida")
 
-  palpitesClassificacaoFeitos  PalpiteClassificacao[] @relation("PalpiteClassificacaoUsuario")
-  palpitesClassificacaoCriados PalpiteClassificacao[] @relation("CriadorPalpiteClassificacao")
-  palpitesClassificacaoAtualiz PalpiteClassificacao[] @relation("AtualizadorPalpiteClassificacao")
+  palpitesClassificacaoFeitos       PalpiteClassificacao[]  @relation("PalpiteClassificacaoUsuario")
+  palpitesClassificacaoCriados      PalpiteClassificacao[]  @relation("CriadorPalpiteClassificacao")
+  palpitesClassificacaoAtualizados  PalpiteClassificacao[]  @relation("AtualizadorPalpiteClassificacao")
+
+  configuracoesCampeonatosCriados     ConfiguracaoCampeonato[]  @relation("CriadorConfiguracaoCampeonato")
+  configuracoesCampeonatosAtualizados ConfiguracaoCampeonato[]  @relation("AtualizadorConfiguracaoCampeonato")
 
   @@map("usuarios")
 }

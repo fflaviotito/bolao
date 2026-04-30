@@ -1,0 +1,19 @@
+model ConfiguracaoCampeonato {
+    id  String  @id @default(cuid())
+
+    campeonatoId    String      @unique @map("campeonato_id")
+    campeonato      Campeonato  @relation(fields: [campeonatoId], references: [id])
+
+    quantidadeTimes     Int @map("quantidade_times")
+    quantidadeRodadas   Int @map("quantidade_rodadas")
+
+    criadoEm    DateTime @default(now()) @map("criado_em")
+    criadoPorId String   @map("criado_por_id")
+    criadoPor   Usuario  @relation("CriadorConfiguracaoCampeonato", fields: [criadoPorId], references: [id])
+
+    atualizadoEm    DateTime @updatedAt @map("atualizado_em")
+    atualizadoPorId String?  @map("atualizado_por_id")
+    atualizadoPor   Usuario? @relation("AtualizadorConfiguracaoCampeonato", fields: [atualizadoPorId], references: [id])
+
+    @@map("configuracoes_campeonato")
+}

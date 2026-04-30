@@ -1,3 +1,10 @@
+enum StatusCampeonato {
+  rascunho
+  configurado
+  em_andamento
+  finalizado
+}
+
 model Campeonato {
   id           String   @id @default(cuid())
   nome         String   @db.VarChar(255)
@@ -5,6 +12,7 @@ model Campeonato {
   ano          Int
   dataInicio   DateTime @map("data_inicio") @db.Date
   dataFim      DateTime @map("data_fim") @db.Date
+  status       StatusCampeonato   @default(rascunho)
   criadoEm     DateTime @default(now()) @map("criado_em")
   atualizadoEm DateTime @updatedAt @map("atualizado_em")
 
@@ -14,9 +22,10 @@ model Campeonato {
   atualizadoPorId String?  @map("atualizado_por_id")
   atualizadoPor   Usuario? @relation("AtualizadorCampeonato", fields: [atualizadoPorId], references: [id])
 
+  regrasPontuacao       RegrasPontuacao?
+  configuracao          ConfiguracaoCampeonato?
   timesParticipantes    TimesPorCampeonato[]
   rodadas               Rodada[]
-  regrasPontuacao       RegrasPontuacao?
   palpitesClassificacao PalpiteClassificacao[]
 
   @@map("campeonatos")
