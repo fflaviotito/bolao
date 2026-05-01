@@ -8,6 +8,31 @@ export const inserirCampeonato = async (dados: Prisma.CampeonatoUncheckedCreateI
     });
 };
 
+export const inserirRegrasConfiguracoes = async (
+    dadosConfiguracao: Prisma.ConfiguracaoCampeonatoUncheckedCreateInput,
+    dadosRegras: Prisma.RegrasPontuacaoUncheckedCreateInput
+) => {
+    return await prisma.$transaction(async (tx) => {
+        const novaConfiguracao = await tx.configuracaoCampeonato.create({
+            data: dadosConfiguracao
+        });
+
+        const novasRegras = await tx.regrasPontuacao.create({
+            data: dadosRegras
+        });
+
+        await tx.campeonato.update({
+            where: { id: dadosConfiguracao.campeonatoId },
+            data: { status: 'configurado' }
+        });
+
+        return {
+            configuracao: novaConfiguracao,
+            regras: novasRegras
+        };
+    });
+};
+
 export const selecionarCampeonatoPorId = async (id: string) => {
     return await prisma.campeonato.findUnique({
         where: { id }

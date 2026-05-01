@@ -70,3 +70,7 @@ export const siglaTimeRegra = z
     .toUpperCase()
     .length(3, 'A sigla deve conter exatas 3 letras')
     .regex(/^[A-Z]+$/, 'A sigla deve conter apenas letras');
+
+export const numeroIntRegra = z.number().int().positive('O valor deve ser maior que 0.');
+
+export const pontosRegra = z.number().int().nonnegative('A pontuação não pode ser negativa.');
