@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client';
+import type { Campeonato, Prisma } from '@prisma/client';
 import prisma from '../db';
 import { PaginacaoRepositorio } from '../types/Paginacao';
 
@@ -80,4 +80,16 @@ export const selecionarCampeonatosPaginado = async ({
     ]);
 
     return { total, campeonatos };
+};
+
+export const selecionarRegrasConfiguracoes = async (idCampeonato: string) => {
+    const configuracoes = await prisma.configuracaoCampeonato.findUnique({
+        where: { campeonatoId: idCampeonato }
+    });
+
+    const regras = await prisma.regrasPontuacao.findUnique({
+        where: { campeonatoId: idCampeonato }
+    });
+
+    return { configuracoes, regras };
 };
